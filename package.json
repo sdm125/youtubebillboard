@@ -24,7 +24,7 @@
     "gulp-sass": "^3.1.0",
     "gulp-uglify": "^3.0.0",
     "main-bower-files": "^2.13.1"
-  }
+  },
   "scripts": {
     "start": "node app.js"
   }
