@@ -1,0 +1,17 @@
+<nav class="clearfix">
+  <span>
+    <div class="btn share-btn" ng-click="share = !share">
+      <i class="fas fa-share-alt float-left" ng-class="{ 'share-active' : share }"t></i>
+      <strong class="share-btn-date" ng-class="{ 'hide-opacity' : share }">SHARE {{ month | monthName }} {{ day || 'Day' }}, {{ year || 'Year' }}</strong>
+      <div class="float-left">
+        <a ng-href="https://www.facebook.com/sharer.php?u={{ shareUrl }}" target="_blank" ng-class="{ 'share-slide' : share }"><i class="fab fa-facebook-f"></i></a>
+        <a ng-href="https://twitter.com/intent/tweet?url={{ shareUrl }}" target="_blank" ng-class="{ 'share-slide' : share }"><i class="fab fa-twitter"></i></a>
+        <a ng-href="http://pinterest.com/pin/create/link/?url={{ shareUrl }}" target="_blank" ng-class="{ 'share-slide' : share }" ><i class="fab fa-pinterest-p"></i></a>
+        <a ng-href="https://www.tumblr.com/widgets/share/tool?canonicalUrl={{ shareUrl }}" target="_blank" ng-class="{ 'share-slide' : share }"><i class="fab fa-tumblr"></i></a>
+        <a ng-href="https://reddit.com/submit?url={={{ shareUrl }}" target="_blank" ng-class="{ 'share-slide' : share }"><i class="fab fa-reddit-alien"></i></a>
+      </div>
+    </div>
+  </span>
+  <!-- <i class="fas fa-ellipsis-v fa-2x float-right"></i> -->
+  <i class="fas fa-bars fa-2x mt-3 float-right"></i>
+</nav>

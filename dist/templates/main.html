@@ -1,0 +1,122 @@
+<div id="record-loader">
+  <h2>Loading...</h2>
+  <div id="record">
+    <div class="record-groove">
+      <div class="record-groove">
+        <div class="record-groove">
+          <div id="record-label">
+            <small class="text-center">{{ month | monthName }} {{ day || 'Day' }}, {{ year || 'Year' }}</small>
+            <div id="record-hole"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<nav class="clearfix">
+  <div class="btn share-btn" ng-click="share = !share">
+    <i class="fas fa-share-alt float-left" ng-class="{ 'share-active' : share }"t></i>
+    <strong class="share-btn-date" ng-class="{ 'hide-opacity' : share }">SHARE {{ month | monthName }} {{ day || 'Day' }}, {{ year || 'Year' }}</strong>
+    <div class="float-left">
+      <a ng-href="https://www.facebook.com/sharer.php?u={{ shareUrl }}" target="_blank" ng-class="{ 'share-slide' : share }"><i class="fab fa-facebook-f"></i></a>
+      <a ng-href="https://twitter.com/intent/tweet?url={{ shareUrl }}" target="_blank" ng-class="{ 'share-slide' : share }"><i class="fab fa-twitter"></i></a>
+      <a ng-href="http://pinterest.com/pin/create/link/?url={{ shareUrl }}" target="_blank" ng-class="{ 'share-slide' : share }" ><i class="fab fa-pinterest-p"></i></a>
+      <a ng-href="https://www.tumblr.com/widgets/share/tool?canonicalUrl={{ shareUrl }}" target="_blank" ng-class="{ 'share-slide' : share }"><i class="fab fa-tumblr"></i></a>
+      <a ng-href="https://reddit.com/submit?url={={{ shareUrl }}" target="_blank" ng-class="{ 'share-slide' : share }"><i class="fab fa-reddit-alien"></i></a>
+    </div>
+  </div>
+  <i class="fas fa-ellipsis-v fa-lg float-right" ng-click="help = !help"></i>
+</nav>
+
+<div id="help" class="container-fluid" ng-class="{ 'show-help' : help }">
+  <div class="d-flex flex-row justify-content-center">
+    <div class="col-lg-9 text-center">
+      <h1><strong>HOW TO USE</strong><h1>
+      <h2 class>
+        Select month, day, year. Use slider to enter a date. Try your birthday <i class="fas fa-birthday-cake"></i>.
+    Press <i class="fas fa-play"></i> to see the top 10 Billboard song's music videos for that date.
+      </h2>
+      <button style="border-radius: 20px;" class="btn btn-lg btn-outline-dark" ng-click="help = !help">Close</button>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid">
+  <header>
+    <div class="row">
+      <div class="col-12">
+        <h1 class="text-center mt-6"><i class="fab fa-youtube"></i><strong>Billboard TOP 10</strong></h2>
+      </div>
+    </div>
+  </header>
+</div>
+
+<div class="container">
+  <div class="row mt-3">
+    <div class="mt-3 mx-auto col-lg-7 col-md-10" ng-model="toptenDate">
+      <h1 class="text-center mb-5 top-ten-date-header">{{ month | monthName }} {{ day || 'Day' }}, {{ year || 'YYYY' }}</h1>
+      <form>
+        <div class="mt-5 clearfix">
+          <!-- <div class="d-flex justify-content-between range"> -->
+              <!-- <span class="range-min">Jan</span><span class="range-max float-right">{{ maxMonth | monthName }}</span> -->
+            <!-- <span class="range-marker" ng-show="toggleDate === 'month'" ng-repeat="month in numberRangeToArr(1, maxMonth, 6);">{{ month| monthName }}</span> -->
+            <!-- <span class="range-marker" ng-show="toggleDate === 'day'" ng-repeat="day in numberRangeToArr(1, maxDay, 6);">{{ day }}</span> -->
+            <!-- <span class="range-marker" ng-show="toggleDate === 'year'" ng-repeat="year in numberRangeToArr(1958, maxYear, 6);">{{ year }}</span> -->
+            <!-- <span ng-show="toggleDate === 'day'" class="range-min">1</span><span class="range-max float-right">{{ maxDay }}</span> -->
+            <!-- <span ng-show="toggleDate === 'year'" class="range-min">1958</span><span class="range-max float-right">{{ maxYear }}</span> -->
+          <!-- </div> -->
+          <input type="range" min="1" max="{{ maxMonth }}" class="slider" ng-show="toggleDate === 'month'" ng-model="month">
+          <input type="range" min="1" max="{{ maxDay }}" class="slider" ng-show="toggleDate === 'day'" ng-model="day">
+          <input type="range" min="1958" max="{{ maxYear }}" class="slider" ng-show="toggleDate === 'year'" ng-model="year">
+        </div>
+        <div class="btn-group d-flex justify-content-center date-btns mt-5">
+          <button style="border-radius: 20px 0 0 20px" type="button" ng-click="toggleDate = 'month'" ng-class="toggleDate === 'month' ? 'btn-active' : ''" class="btn btn-lg btn-outline-dark">Month</button>
+          <button type="button" ng-click="toggleDate = 'day'" ng-class="toggleDate === 'day' ? 'btn-active' : ''" class="btn btn-lg btn-outline-dark">Day</button>
+          <button style="border-radius: 0 20px 20px 0;" type="button" ng-click="toggleDate = 'year'" ng-class="toggleDate === 'year' ? 'btn-active' : ''" class="btn btn-lg btn-outline-dark">Year</button>
+        </div>
+        <div class="mt-5">
+          <button class="btn btn-lg btn-outline-dark submit d-block" type="button" ng-click="dateSubmit(year, month, day)">
+            <i class="fas fa-play fa-1x"></i>
+          </button>
+        </div>
+        <!-- <div class="input-group"> -->
+          <!-- <h3>{{ year }}</h3> -->
+          <!-- <input type="range" min="1958" max="2018" class="slider" id="myRange" ng-model="year"> -->
+          <!-- <input id="date" type="text" class="form-control" autocomplete="off" ng-model="topTenDate" placeholder="YYYY/MM/DD"> -->
+          <!-- <div class="input-group-append"> -->
+            <!-- <button class="btn btn-outline-secondary" type="button" ng-click="dateSubmit(topTenDate)"><i class="fas fa-play fa-2x"></i></button> -->
+          <!-- </div> -->
+        <!-- </div> -->
+      </form>
+    </div>
+    <div class="mt-4 col-12 d-flex justify-content-center" ng-repeat="song in songs">
+      <div id="song{{$index + 1}}"  class="col-lg-9">
+        <div class="card">
+          <div class="card-body">
+            <div class="videowrapper">
+              <iframe ng-src="{{song.youtube}}" frameborder="0" allowfullscreen></iframe>
+            </div>
+          </div>
+          <div class="card-footer clearfix">
+            <div class="row">
+              <div class="fa-stack fa-lg float-left col-xs-2">
+                <i class="fas fa-star fa-stack-2x" ng-show="$index === 0"></i>
+                <i class="far fa-circle fa-stack-2x" ng-show="$index !== 0"></i>
+                <span class="fa-stack-1x" ng-class="$index === 0 ? 'star-rank-text' : 'circle-rank-text'">{{ song.rank }}</span>
+              </div>
+              <div class="col-xs-10"><strong>{{ song.title | uppercase }}</strong><br><span class="text-muted">{{ song.artist | uppercase }}</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <i class="fas fa-arrow-up" ng-class="{ 'active' : boolChangeClass }" scroll ng-click="toTheTop()" ></i>
+</div>
+
+<footer>
+  <div class="text-center mt-5">
+    <a href="www.stacymackin.com">&copy; Stacy Mackin 2018</div>
+  </div>
+</footer>
