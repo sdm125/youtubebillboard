@@ -95,18 +95,19 @@ app.controller('mainCtrl', function($scope, $routeParams, $http, $route, $locati
     }
     else{
       document.getElementById('record-loader').style.opacity = '0';
-      setTimeout(() => {
-        if(document.getElementById('song1')){
-          $document.scrollToElement(angular.element(document.getElementById('song1')), 75, 300);
+        setTimeout(() => {
           document.getElementById('record-loader').style.display = 'none';
-        }
-      }, 300);
+          if(document.getElementById('song1')){
+            $document.scrollToElement(angular.element(document.getElementById('song1')), 75, 300);
+          }
+        }, 300);
     }
   }
 
-  $scope.toTheTop = function() {
-    $document.scrollToElement(angular.element(document.getElementsByTagName('body')[0]), 500, 500);
-  }
+  // $scope.toTheTop = function() {
+  //   if()
+  //   $document.scrollToElement(angular.element(document.getElementsByTagName('body')[0]), 500, 500);
+  // }
 
   // $scope.numberRangeToArr = function(start, end, max){
   //   let arr = [start];
