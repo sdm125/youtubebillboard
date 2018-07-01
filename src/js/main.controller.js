@@ -104,10 +104,10 @@ app.controller('mainCtrl', function($scope, $routeParams, $http, $route, $locati
     }
   }
 
-  // $scope.toTheTop = function() {
-  //   if()
-  //   $document.scrollToElement(angular.element(document.getElementsByTagName('body')[0]), 500, 500);
-  // }
+  $scope.toTheTop = function() {
+    if()
+    $document.scrollToElement(angular.element(document.getElementsByTagName('body')[0]), 500, 500);
+  }
 
   // $scope.numberRangeToArr = function(start, end, max){
   //   let arr = [start];
