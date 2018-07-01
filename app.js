@@ -5,6 +5,7 @@ const path = require('path');
 const billboard = require('billboard-top-100').getChart;
 const moment = require('moment');
 const search = require('youtube-search');
+const errMsg = 'chart not found';
 
 const youtubeOpts = {
   maxResults: 1,
@@ -15,7 +16,7 @@ const getTopTen = (date) => {
   let topTen = [];
   return new Promise((resolve, reject) => {
       billboard('hot-100', moment().format(date), (songs, err) => {
-        if (err) reject(err)
+        if (err) return reject(err)
         console.log('Getting billboard data...')
         for(let i = 0; i < 10; i++){
           console.log('Retrieved ' + songs[i].artist + ':' + songs[i].title);
@@ -61,6 +62,13 @@ app.get('/api/date', (req, res) => {
     Promise.all(getYoutubeLink(topTen)).then((links) => {
       res.send(links);
     })
+    .catch(() => {
+      console.log(errMsg);
+      res.send(errMsg);
+    })
+  }).catch(() => {
+    console.log(errMsg);
+    res.send(errMsg);
   })
 });
 

@@ -67,7 +67,7 @@ app.controller('mainCtrl', function($scope, $routeParams, $http, $route, $locati
       $scope.songs = topTen.data;
     }).catch(function(err){
       recordLoader(false);
-      console.log(err);
+      alert(`No chart found for ${$scope.month}-${$scope.day}-${$scope.year}`);
     })
   }
 
@@ -76,9 +76,14 @@ app.controller('mainCtrl', function($scope, $routeParams, $http, $route, $locati
     recordLoader(true);
     $http.get(`/api/date?month=${month}&day=${day}&year=${year}`)
     .then(function(topTen){
+      if (topTen.data === 'chart not found') throw 'Sorry, no top ten found for that date.';
       recordLoader(false);
       $scope.songs = topTen.data;
       $route.updateParams({month: $scope.month, day: $scope.day, year: $scope.year});
+    })
+    .catch((e) => {
+      recordLoader(false);
+      alert(e);
     })
   };
 
@@ -90,9 +95,11 @@ app.controller('mainCtrl', function($scope, $routeParams, $http, $route, $locati
     }
     else{
       document.getElementById('record-loader').style.opacity = '0';
-      setTimeout(()=> {
-        $document.scrollToElement(angular.element(document.getElementById('song1')), 75, 300);
-        document.getElementById('record-loader').style.display = 'none';
+      setTimeout(() => {
+        if(document.getElementById('song1')){
+          $document.scrollToElement(angular.element(document.getElementById('song1')), 75, 300);
+          document.getElementById('record-loader').style.display = 'none';
+        }
       }, 300);
     }
   }
