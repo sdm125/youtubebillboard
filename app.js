@@ -52,7 +52,7 @@ app.get('/', (req, res) => {
 
 app.get('/api/date', (req, res) => {
   let year = req.query.year;
-  let month = req.query.month < 10 ? `00${req.query.month}` : req.query.month;
+  let month = req.query.month < 10 ? `0${req.query.month}` : req.query.month;
   let day  = req.query.day < 10 ? `0${req.query.day}` : req.query.day;
   let date = `${year}-${month}-${day}`;
 
