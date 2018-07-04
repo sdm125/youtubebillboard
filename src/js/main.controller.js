@@ -91,7 +91,7 @@ app.controller('mainCtrl', function($scope, $routeParams, $http, $route, $locati
     if(toggle){
       // angular.element($document.find('#record-loader')).addClass('toggle')
       document.getElementById('record-loader').style.opacity = '1';
-      document.getElementById('record-loader').style.display = 'block';
+      document.getElementById('record-loader').style.display = 'flex';
     }
     else{
       document.getElementById('record-loader').style.opacity = '0';
@@ -105,7 +105,6 @@ app.controller('mainCtrl', function($scope, $routeParams, $http, $route, $locati
   }
 
   $scope.toTheTop = function() {
-    if()
     $document.scrollToElement(angular.element(document.getElementsByTagName('body')[0]), 500, 500);
   }
 
