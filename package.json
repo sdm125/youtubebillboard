@@ -4,16 +4,17 @@
   "description": "Show YouTube videos from Billboard top 10 date data.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "billboard-top-100": "^2.0.8",
+    "billboard-top-100": "^2.1.1",
     "dotenv": "^5.0.1",
-    "express": "^4.16.2",
-    "moment": "^2.20.1",
-    "youtube-search": "^1.0.10"
+    "express": "^4.16.3",
+    "moment": "^2.22.2",
+    "request-promise": "^4.2.2",
+    "youtube-search": "^1.1.1"
   },
   "devDependencies": {
     "gulp": "^3.9.1",
@@ -21,11 +22,8 @@
     "gulp-imagemin": "^4.1.0",
     "gulp-livereload": "^3.8.1",
     "gulp-nodemon": "^2.2.1",
-    "gulp-sass": "^3.1.0",
-    "gulp-uglify": "^3.0.0",
+    "gulp-sass": "^3.2.1",
+    "gulp-uglify": "^3.0.1",
     "main-bower-files": "^2.13.1"
-  },
-  "scripts": {
-    "start": "node app.js"
   }
 }

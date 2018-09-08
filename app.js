@@ -15,7 +15,7 @@ const youtubeOpts = {
 const getTopTen = (date) => {
   let topTen = [];
   return new Promise((resolve, reject) => {
-      billboard('hot-100', moment().format(date), (songs, err) => {
+      billboard('hot-100', date, (err, songs) => {
         if (err) return reject(err)
         console.log('Getting billboard data...')
         for(let i = 0; i < 10; i++){
@@ -66,7 +66,7 @@ app.get('/api/date', (req, res) => {
       console.log(errMsg);
       res.send(errMsg);
     })
-  }).catch(() => {
+  }).catch((e) => {
     console.log(errMsg);
     res.send(errMsg);
   })
