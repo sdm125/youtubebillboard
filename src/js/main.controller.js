@@ -2,12 +2,13 @@
 
 const app = angular.module('youtubeBillboard', ['ngRoute', 'duScroll']);
 
-app.config(($routeProvider) => {
+app.config(($routeProvider, $locationProvider) => {
   $routeProvider
   .when('/:month?/:day?/:year?', {
     templateUrl : 'templates/main.html',
     controller: 'mainCtrl'
-  })
+  });
+  $locationProvider.html5Mode(true);
 });
 
 app.config(($sceDelegateProvider) => {

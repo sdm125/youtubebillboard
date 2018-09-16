@@ -1,13 +1,14 @@
 'use strict';
 
-var app = angular.module('youtubeBillboard', ['ngRoute', 'duScroll']);
+const app = angular.module('youtubeBillboard', ['ngRoute', 'duScroll']);
 
-app.config(($routeProvider) => {
+app.config(($routeProvider, $locationProvider) => {
   $routeProvider
   .when('/:month?/:day?/:year?', {
     templateUrl : 'templates/main.html',
     controller: 'mainCtrl'
-  })
+  });
+  $locationProvider.html5Mode(true);
 });
 
 app.config(($sceDelegateProvider) => {
@@ -52,14 +53,14 @@ app.controller('mainCtrl', function($scope, $routeParams, $http, $route, $locati
   $scope.shareUrl = window.location.href;
 
   /* Update monthLength on change of month and years */
-  $scope.$watchGroup(['month', 'year'], function(newVal,oldVal){
-    if(newVal !== oldVal){
+  $scope.$watchGroup(['month', 'year'], function(newVal,oldVal) {
+    if (newVal !== oldVal) {
       $scope.maxDay = $scope.year === moment().year() && $scope.month === moment().month() + 1 ? moment().date() : moment.prototype.monthLength();
       $scope.maxMonth = $scope.year === moment().year() ? moment().month() + 1 : 12;
     }
   });
 
-  if($routeParams.month !== undefined && $routeParams.day !== undefined && $routeParams.year !== undefined){
+  if ($routeParams.month !== undefined && $routeParams.day !== undefined && $routeParams.year !== undefined) {
     recordLoader(true);
     $http.get(`/api/date?month=${$scope.month}&day=${$scope.day}&year=${$scope.year}`)
     .then(function(topTen){
@@ -68,7 +69,7 @@ app.controller('mainCtrl', function($scope, $routeParams, $http, $route, $locati
     }).catch(function(err){
       recordLoader(false);
       alert(`No chart found for ${$scope.month}-${$scope.day}-${$scope.year}`);
-    })
+    });
   }
 
   $scope.dateSubmit = function(year, month, day){
@@ -80,24 +81,23 @@ app.controller('mainCtrl', function($scope, $routeParams, $http, $route, $locati
       recordLoader(false);
       $scope.songs = topTen.data;
       $route.updateParams({month: $scope.month, day: $scope.day, year: $scope.year});
-    })
-    .catch((e) => {
+    }).catch((e) => {
       recordLoader(false);
       alert(e);
-    })
+    });
   };
 
   function recordLoader(toggle){
-    if(toggle){
+    if (toggle) {
       // angular.element($document.find('#record-loader')).addClass('toggle')
       document.getElementById('record-loader').style.opacity = '1';
       document.getElementById('record-loader').style.display = 'flex';
     }
-    else{
+    else {
       document.getElementById('record-loader').style.opacity = '0';
         setTimeout(() => {
           document.getElementById('record-loader').style.display = 'none';
-          if(document.getElementById('song1')){
+          if (document.getElementById('song1')) {
             $document.scrollToElement(angular.element(document.getElementById('song1')), 75, 300);
           }
         }, 300);
