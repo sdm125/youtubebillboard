@@ -26,10 +26,10 @@ body {
 
 #record {
   display: flex;
-  max-height: 25rem;
-  height: 100%;
-  max-width: 25rem;
-  width: 98%;
+  max-height: 400px;
+  height: 75vw;
+  max-width: 400px;
+  width: 75vw;
   background: #000;
   border-radius: 100%;
   margin: auto;
@@ -46,9 +46,14 @@ body {
     padding: 2.4rem;
     border-bottom: none;
     transform: rotate(360deg); }
+    @media only screen and (max-width: 550px) {
+      #record .record-groove {
+        padding: 7vw; } }
   #record #record-label {
-    height: 7rem;
-    width: 7rem;
+    height: 20vw;
+    width: 20vw;
+    max-width: 110px;
+    max-height: 110px;
     background: #fff;
     border-radius: 100%;
     display: flex;
@@ -57,6 +62,10 @@ body {
     #record #record-label #record-label-text {
       font-size: 1.5rem;
       line-height: 3rem; }
+      @media only screen and (max-width: 500px) {
+        #record #record-label #record-label-text {
+          font-size: 5vw;
+          line-height: 9vw; } }
     #record #record-label #record-hole {
       position: absolute;
       height: 8px;
