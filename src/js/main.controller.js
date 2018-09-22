@@ -47,6 +47,7 @@ app.controller('mainCtrl', function($scope, $routeParams, $http, $route, $locati
   $scope.maxDay = $scope.year === moment().year() && $scope.month === moment().month() + 1 ? moment().date() : moment.prototype.monthLength();
   $scope.toggleDate = 'year';
   $scope.shareUrl = window.location.href;
+  $scope.copyrightYear = new Date().getFullYear();
 
   /* Update monthLength on change of month and years */
   $scope.$watchGroup(['month', 'year'], function(newVal,oldVal) {
