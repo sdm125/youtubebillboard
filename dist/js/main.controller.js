@@ -49,6 +49,7 @@ app.controller('mainCtrl', function($scope, $routeParams, $http, $route, $locati
   $scope.maxDay = $scope.year === moment().year() && $scope.month === moment().month() + 1 ? moment().date() : moment.prototype.monthLength();
   $scope.toggleDate = 'year';
   $scope.shareUrl = window.location.href;
+  $scope.copyrightYear = new Date().getFullYear();
 
   /* Update monthLength on change of month and years */
   $scope.$watchGroup(['month', 'year'], function(newVal,oldVal) {
@@ -68,11 +69,11 @@ app.controller('mainCtrl', function($scope, $routeParams, $http, $route, $locati
         $scope.songs = topTen.data;
       }).catch((e) => {
         recordLoader(false);
-        alert(e);
+        toggleErrorModal(e);
       });
     }
     else {
-      alert('Please enter a valid date.')
+      toggleErrorModal('Please enter a valid date.');
     }
   }
 
@@ -87,7 +88,7 @@ app.controller('mainCtrl', function($scope, $routeParams, $http, $route, $locati
       $route.updateParams({month: $scope.month, day: $scope.day, year: $scope.year});
     }).catch((e) => {
       recordLoader(false);
-      alert(e);
+      toggleErrorModal(e);
     });
   };
 
@@ -114,6 +115,11 @@ app.controller('mainCtrl', function($scope, $routeParams, $http, $route, $locati
       }, 300);
     }
   };
+
+  function toggleErrorModal(msg) {
+    $scope.errorModal = !$scope.errorModal;
+    $scope.errorMessage = msg;
+  }
 
   $scope.toTheTop = function() {
     $document.scrollToElement(angular.element(document.getElementsByTagName('body')[0]), 500, 500);

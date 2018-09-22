@@ -44,6 +44,15 @@
   </div>
 </div>
 
+<div id="error-modal" class="container-fluid" ng-class="{ 'show-error-modal' : errorModal }">
+  <div class="d-flex flex-row justify-content-center">
+    <div class="col-lg-9 text-center">
+      <h1><strong>{{ errorMessage }}</strong><h1>
+      <button style="border-radius: 20px;" class="btn btn-lg btn-outline-dark" ng-click="errorModal = !errorModal">Close</button>
+    </div>
+  </div>
+</div>
+
 <div class="container-fluid">
   <header>
     <div class="row">
@@ -119,6 +128,6 @@
 
 <footer>
   <div class="text-center mt-5">
-    <a href="www.stacymackin.com">&copy; Stacy Mackin 2018</div>
+    <a href="https://www.stacymackin.com" target="_blank">&copy; Stacy Mackin {{ copyrightYear }}</div>
   </div>
 </footer>
