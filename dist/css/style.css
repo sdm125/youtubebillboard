@@ -18,7 +18,7 @@ body {
   z-index: 10000;
   background-color: rgba(255, 255, 255, 0.95);
   position: fixed; }
-  #record-loader h2 {
+  #record-loader h1 {
     text-align: center; }
   #record-loader.toggle {
     opacity: 1 !important;
