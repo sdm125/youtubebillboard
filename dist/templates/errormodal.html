@@ -1,0 +1,8 @@
+<div id="error-modal" class="container-fluid" ng-class="{ 'show-error-modal' : $parent.errorModal }">
+  <div class="d-flex flex-row justify-content-center">
+    <div class="col-lg-9 text-center">
+      <h1><strong>{{ errorMessage }}</strong><h1>
+      <button style="border-radius: 20px;" class="btn btn-lg btn-outline-dark" ng-click="$parent.errorModal = !$parent.errorModal">Close</button>
+    </div>
+  </div>
+</div>

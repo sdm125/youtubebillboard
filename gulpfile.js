@@ -22,17 +22,15 @@ gulp.task('message', function(){
   console.log('Gulp running...');
 });
 
-// Copy all HTML files
 gulp.task('copyHtml', function(){
-  gulp.src('src/*.html')
-      .pipe(gulp.dest('dist'))
+  gulp.src('src/index.html')
+    .pipe(gulp.dest('dist'))
 });
 
-// Copy Template files
+// Copy all HTML files
 gulp.task('copyTemplates', function(){
-  console.log('here')
   gulp.src('src/templates/*.html')
-      .pipe(gulp.dest('dist/templates'))
+    .pipe(gulp.dest('dist/templates'))
 });
 
 // Optimize Images
@@ -71,15 +69,13 @@ gulp.task('server',function(){
     });
 });
 
-// gulp.task('default', ['message', 'copyHtml', 'imageMin', 'sass', 'scripts']);
-
 gulp.task('watch', function(){
   gulp.watch('bower_components/*', ['main-bower-files']);
   gulp.watch('src/js/*.js', ['scripts']);
   gulp.watch('src/images/*', ['imageMin']);
   gulp.watch('src/sass/*.scss', ['sass']);
+  gulp.watch('src/index.html', ['copyHtml']);
   gulp.watch('src/templates/*.html', ['copyTemplates']);
-  gulp.watch('src/*.html', ['copyHtml']);
 });
 
 gulp.task('serve', ['server','watch']);

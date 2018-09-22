@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no minimal-ui">
@@ -12,7 +11,11 @@
     <!-- <base href="/"> -->
   </head>
 
-  <body ng-app="youtubeBillboard">
+  <body ng-app="youtubeBillboard" ng-controller="mainCtrl">
+    <div ng-include="'templates/recordloader.html'"></div>
+    <div ng-include="'templates/nav.html'"></div>
+    <div ng-include="'templates/help.html'"></div>
+    <div ng-include="'templates/errormodal.html'"></div>
 
     <div ng-view></div>
 
@@ -22,5 +25,4 @@
     <script type="text/javascript" src="vendor/moment/moment.js"></script>
     <script src="js/main.controller.js"></script>
   </body>
-
 </html>

@@ -8,8 +8,6 @@ app.config(($routeProvider, $locationProvider, $sceDelegateProvider) => {
     controller: 'mainCtrl'
   });
 
-  // $locationProvider.html5Mode(true);
-
   $sceDelegateProvider.resourceUrlWhitelist([
     'self',                    // trust all resources from the same origin
     '*://www.youtube.com/**'   // trust all resources from `www.youtube.com`
@@ -49,7 +47,6 @@ app.controller('mainCtrl', function($scope, $routeParams, $http, $route, $locati
   $scope.maxDay = $scope.year === moment().year() && $scope.month === moment().month() + 1 ? moment().date() : moment.prototype.monthLength();
   $scope.toggleDate = 'year';
   $scope.shareUrl = window.location.href;
-  $scope.copyrightYear = new Date().getFullYear();
 
   /* Update monthLength on change of month and years */
   $scope.$watchGroup(['month', 'year'], function(newVal,oldVal) {
@@ -73,7 +70,7 @@ app.controller('mainCtrl', function($scope, $routeParams, $http, $route, $locati
       });
     }
     else {
-      toggleErrorModal('Please enter a valid date.');
+      toggleErrorModal('Please enter a valid date.')
     }
   }
 
@@ -117,8 +114,8 @@ app.controller('mainCtrl', function($scope, $routeParams, $http, $route, $locati
   };
 
   function toggleErrorModal(msg) {
-    $scope.errorModal = !$scope.errorModal;
-    $scope.errorMessage = msg;
+    $scope.$parent.errorModal = !$scope.$parent.errorModal;
+    $scope.$parent.errorMessage = msg;
   }
 
   $scope.toTheTop = function() {

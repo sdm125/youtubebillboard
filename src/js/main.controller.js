@@ -8,8 +8,6 @@ app.config(($routeProvider, $locationProvider, $sceDelegateProvider) => {
     controller: 'mainCtrl'
   });
 
-  // $locationProvider.html5Mode(true);
-
   $sceDelegateProvider.resourceUrlWhitelist([
     'self',                    // trust all resources from the same origin
     '*://www.youtube.com/**'   // trust all resources from `www.youtube.com`
@@ -68,11 +66,11 @@ app.controller('mainCtrl', function($scope, $routeParams, $http, $route, $locati
         $scope.songs = topTen.data;
       }).catch((e) => {
         recordLoader(false);
-        alert(e);
+        toggleErrorModal(e);
       });
     }
     else {
-      alert('Please enter a valid date.')
+      toggleErrorModal('Please enter a valid date.')
     }
   }
 
@@ -87,7 +85,7 @@ app.controller('mainCtrl', function($scope, $routeParams, $http, $route, $locati
       $route.updateParams({month: $scope.month, day: $scope.day, year: $scope.year});
     }).catch((e) => {
       recordLoader(false);
-      alert(e);
+      toggleErrorModal(e);
     });
   };
 
@@ -114,6 +112,11 @@ app.controller('mainCtrl', function($scope, $routeParams, $http, $route, $locati
       }, 300);
     }
   };
+
+  function toggleErrorModal(msg) {
+    $scope.$parent.errorModal = !$scope.$parent.errorModal;
+    $scope.$parent.errorMessage = msg;
+  }
 
   $scope.toTheTop = function() {
     $document.scrollToElement(angular.element(document.getElementsByTagName('body')[0]), 500, 500);
