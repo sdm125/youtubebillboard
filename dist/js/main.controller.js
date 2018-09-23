@@ -14,15 +14,7 @@ app.config(($routeProvider, $locationProvider, $sceDelegateProvider) => {
   ]);
 });
 
-app.filter('monthName', [() => {
-  return (monthNumber) => {
-    return [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-             'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ]
-           [--monthNumber];
-  }
-}]);
-
-/* Found here https://stackoverflow.com/questions/14878761/bind-class-toggle-to-window-scroll-event */
+// Found here https://stackoverflow.com/questions/14878761/bind-class-toggle-to-window-scroll-event
 app.directive("scroll", function ($window) {
   return function(scope, element, attrs) {
     angular.element($window).bind("scroll", function() {
@@ -37,19 +29,36 @@ app.directive("scroll", function ($window) {
   };
 });
 
+app.filter('monthName', [() => {
+  return (monthNumber) => {
+    return [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+             'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ]
+           [--monthNumber];
+  }
+}]);
+
 app.controller('mainCtrl', function($scope, $routeParams, $http, $route, $location, $document) {
+  // Get date values from URL or set to current date if no date in URL.
   $scope.month = parseInt($routeParams.month) || moment().month() + 1;
   $scope.day = parseInt($routeParams.day) || moment().date();
   $scope.year = parseInt($routeParams.year) || moment().year();
+
+  // Date limits
   $scope.maxYear = moment().year();
   $scope.maxMonth = $scope.year === moment().year() ? moment().month() + 1 : 12;
-  moment.prototype.monthLength = ()=> moment($scope.year + '-' + $scope.month, 'YYYY-MM').daysInMonth();
   $scope.maxDay = $scope.year === moment().year() && $scope.month === moment().month() + 1 ? moment().date() : moment.prototype.monthLength();
-  $scope.toggleDate = 'year';
-  $scope.shareUrl = window.location.href;
-  $scope.copyrightYear = new Date().getFullYear();
+  moment.prototype.monthLength = () => {
+    moment($scope.year + '-' + $scope.month, 'YYYY-MM').daysInMonth();
+  }
 
-  /* Update monthLength on change of month and years */
+  // Set initial date slider to year
+  $scope.toggleDate = 'year';
+
+  // Make these values available to scope
+  $scope.shareUrl = window.location.href;
+  $scope.currentYear = new Date().getFullYear();
+
+  // Update monthLength on change of month and years
   $scope.$watchGroup(['month', 'year'], function(newVal,oldVal) {
     if (newVal !== oldVal) {
       $scope.maxDay = $scope.year === moment().year() && $scope.month === moment().month() + 1 ? moment().date() : moment.prototype.monthLength();

@@ -363,6 +363,17 @@ input[type="range"]::-webkit-slider-thumb {
     .chart-header .col-2:nth-child(5) {
       text-align: right; }
 
-footer a {
-  color: #000;
-  font-size: .7rem; }
+footer {
+  position: absolute;
+  bottom: 0;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: 100%;
+  height: 30px; }
+  footer a {
+    color: #000;
+    font-size: .7rem; }
