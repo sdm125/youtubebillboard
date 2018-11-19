@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <!-- <base href="/"> -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no minimal-ui">
     <title>Youtube Billboard</title>
@@ -8,7 +9,6 @@
     <link rel="stylesheet" href="vendor/bootstrap-css-only/css/bootstrap.css">
     <link rel="stylesheet" href="vendor/components-font-awesome/css/fontawesome-all.css">
     <link href="https://fonts.googleapis.com/css?family=Josefin+Sans:700|Roboto+Mono|Inconsolata" rel="stylesheet">
-    <!-- <base href="/"> -->
   </head>
 
   <body ng-app="youtubeBillboard" ng-controller="mainCtrl">
@@ -16,12 +16,13 @@
     <div ng-include="'templates/nav.html'"></div>
     <div ng-include="'templates/help.html'"></div>
     <div ng-include="'templates/errormodal.html'"></div>
-    <div ng-view></div>
+    <div ng-view class="{{ viewClass }}"></div>
     <div ng-include="'templates/footer.html'"></div>
-    <script type="text/javascript" src="vendor/angular/angular.js"></script>
-    <script type="text/javascript" src="vendor/angular-route/angular-route.js"></script>
-    <script type="text/javascript" src="vendor/angular-scroll/angular-scroll.js"></script>
-    <script type="text/javascript" src="vendor/moment/moment.js"></script>
+    <script src="vendor/angular/angular.js"></script>
+    <script src="vendor/angular-route/angular-route.js"></script>
+    <script src="vendor/angular-scroll/angular-scroll.js"></script>
+    <script src="/vendor/angular-animate/angular-animate.js"></script>
+    <script src="vendor/moment/moment.js"></script>
     <script src="js/main.controller.js"></script>
   </body>
 </html>

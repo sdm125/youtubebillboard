@@ -1,7 +1,8 @@
 <nav class="clearfix">
+  <a href="/"><i class="fa fa-arrow-left btn share-btn" aria-hidden="true"></i></a>
   <div class="btn share-btn" ng-click="share = !share">
     <i class="fas fa-share-alt float-left" ng-class="{ 'share-active' : share }"t></i>
-    <strong class="share-btn-date" ng-class="{ 'hide-opacity' : share }">SHARE {{ month | monthName }} {{ day || 'Day' }}, {{ year || 'Year' }}</strong>
+    <strong class="share-btn-date" ng-class="{ 'hide-opacity' : share }">SHARE {{ month | monthName }} {{ day || 'Day' }}, {{ year || 'Year' }} <i class="fa fa-pencil fa-6" aria-hidden="true"></i></strong>
     <div class="float-left">
       <a ng-href="https://www.facebook.com/sharer.php?u={{ shareUrl }}" target="_blank" ng-class="{ 'share-slide' : share }"><i class="fab fa-facebook-f"></i></a>
       <a ng-href="https://twitter.com/intent/tweet?url={{ shareUrl }}" target="_blank" ng-class="{ 'share-slide' : share }"><i class="fab fa-twitter"></i></a>

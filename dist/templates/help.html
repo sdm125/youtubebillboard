@@ -1,12 +1,12 @@
-<div id="help" class="container-fluid" ng-class="{ 'show-help' : $parent.help }">
+<div id="help" class="container-fluid help" ng-class="{ 'show-help' : $parent.help }">
   <div class="d-flex flex-row justify-content-center">
-    <div class="col-lg-9 text-center">
-      <h1><strong>HOW TO USE</strong><h1>
-      <h2 class>
+    <div class="col-lg-9">
+      <h1 class="text-center mb-3"><strong>HOW TO USE</strong><h1>
+      <h2 class="mb-3">
         Select month, day, year. Use slider to enter a date. Try your birthday <i class="fas fa-birthday-cake"></i>.
         Press <i class="fas fa-play"></i> to see the top 10 Billboard music videos for that date.
       </h2>
-      <button style="border-radius: 20px;" class="btn btn-lg btn-outline-dark" ng-click="$parent.help = !$parent.help">Close</button>
+      <button style="border-radius: 20px;" class="btn btn-lg btn-outline-dark d-block m-auto" ng-click="$parent.help = !$parent.help">Close</button>
     </div>
   </div>
 </div>

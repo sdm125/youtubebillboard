@@ -1,17 +1,28 @@
-<nav class="clearfix">
-  <span>
-    <div class="btn share-btn" ng-click="share = !share">
-      <i class="fas fa-share-alt float-left" ng-class="{ 'share-active' : share }"t></i>
-      <strong class="share-btn-date" ng-class="{ 'hide-opacity' : share }">SHARE {{ month | monthName }} {{ day || 'Day' }}, {{ year || 'Year' }}</strong>
-      <div class="float-left">
-        <a ng-href="https://www.facebook.com/sharer.php?u={{ shareUrl }}" target="_blank" ng-class="{ 'share-slide' : share }"><i class="fab fa-facebook-f"></i></a>
-        <a ng-href="https://twitter.com/intent/tweet?url={{ shareUrl }}" target="_blank" ng-class="{ 'share-slide' : share }"><i class="fab fa-twitter"></i></a>
-        <a ng-href="http://pinterest.com/pin/create/link/?url={{ shareUrl }}" target="_blank" ng-class="{ 'share-slide' : share }" ><i class="fab fa-pinterest-p"></i></a>
-        <a ng-href="https://www.tumblr.com/widgets/share/tool?canonicalUrl={{ shareUrl }}" target="_blank" ng-class="{ 'share-slide' : share }"><i class="fab fa-tumblr"></i></a>
-        <a ng-href="https://reddit.com/submit?url={={{ shareUrl }}" target="_blank" ng-class="{ 'share-slide' : share }"><i class="fab fa-reddit-alien"></i></a>
+<div class="top-ten-videos">
+  <div class="container">
+    <div class="row mt-3">
+      <div class="mt-4 col-12 d-flex justify-content-center" ng-repeat="song in songs">
+        <div id="song{{ $index + 1 }}"  class="col-lg-9">
+          <div class="card">
+            <div class="card-body">
+              <div class="videowrapper">
+                <iframe ng-src="{{ song.youtube }}" frameborder="0" allowfullscreen></iframe>
+              </div>
+            </div>
+            <div class="card-footer clearfix">
+              <div class="row">
+                <div class="fa-stack fa-lg float-left col-xs-2">
+                  <i class="fas fa-star fa-stack-2x" ng-show="$index === 0"></i>
+                  <i class="far fa-circle fa-stack-2x" ng-show="$index !== 0"></i>
+                  <span class="fa-stack-1x" ng-class="$index === 0 ? 'star-rank-text' : 'circle-rank-text'">{{ song.rank }}</span>
+                </div>
+                <div class="col-xs-10"><strong>{{ song.title | uppercase }}</strong><br><span class="text-muted">{{ song.artist | uppercase }}</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  </span>
-  <!-- <i class="fas fa-ellipsis-v fa-2x float-right"></i> -->
-  <i class="fas fa-bars fa-2x mt-3 float-right"></i>
-</nav>
+    <i class="fas fa-arrow-up" ng-class="{ 'active' : boolChangeClass }" scroll ng-click="toTheTop()" ></i>
+  </div>
+</div>

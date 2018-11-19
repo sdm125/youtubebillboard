@@ -1,11 +1,18 @@
 'use strict';
 
-const app = angular.module('youtubeBillboard', ['ngRoute', 'duScroll']);
+const app = angular.module('youtubeBillboard', ['ngRoute', 'duScroll', 'ngAnimate']);
 
-app.config(($routeProvider, $locationProvider, $sceDelegateProvider) => {
-  $routeProvider.when('/:month?/:day?/:year?', {
-    templateUrl : 'templates/main.html',
+app.config(($routeProvider, $sceDelegateProvider) => {
+  $routeProvider.when('/', {
+    templateUrl: 'templates/datepicker.html',
     controller: 'mainCtrl'
+  })
+  .when('/:month/:day/:year', {
+    templateUrl: 'templates/topten.html',
+    controller: 'mainCtrl'
+  })
+  .otherwise({
+      redirectTo: '/'
   });
 
   $sceDelegateProvider.resourceUrlWhitelist([
@@ -30,11 +37,11 @@ app.directive("scroll", function ($window) {
 });
 
 app.filter('monthName', [() => {
-  return (monthNumber) => {
+  return monthNumber => {
     return [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
              'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ]
            [--monthNumber];
-  }
+  };
 }]);
 
 app.controller('mainCtrl', function($scope, $routeParams, $http, $route, $location, $document) {
@@ -44,15 +51,18 @@ app.controller('mainCtrl', function($scope, $routeParams, $http, $route, $locati
   $scope.year = parseInt($routeParams.year) || moment().year();
 
   // Date limits
+  moment.prototype.monthLength = () => {
+    return moment($scope.year + '-' + $scope.month, 'YYYY-MM').daysInMonth();
+  }
   $scope.maxYear = moment().year();
   $scope.maxMonth = $scope.year === moment().year() ? moment().month() + 1 : 12;
   $scope.maxDay = $scope.year === moment().year() && $scope.month === moment().month() + 1 ? moment().date() : moment.prototype.monthLength();
-  moment.prototype.monthLength = () => {
-    moment($scope.year + '-' + $scope.month, 'YYYY-MM').daysInMonth();
-  }
 
   // Set initial date slider to year
   $scope.toggleDate = 'year';
+
+  // Set initial view class to date picker
+  $scope.viewClass = 'date-picker';
 
   // Make these values available to scope
   $scope.shareUrl = window.location.href;
@@ -72,8 +82,9 @@ app.controller('mainCtrl', function($scope, $routeParams, $http, $route, $locati
       $http.get(`/api/date?month=${$scope.month}&day=${$scope.day}&year=${$scope.year}`)
       .then(function(topTen){
         if (topTen.data.hasOwnProperty('error')) throw 'Sorry, no top ten found for that date.';
-        recordLoader(false)
+        $scope.viewClass = 'top-ten';
         $scope.songs = topTen.data;
+        recordLoader(false);
       }).catch((e) => {
         recordLoader(false);
         toggleErrorModal(e);
@@ -90,12 +101,14 @@ app.controller('mainCtrl', function($scope, $routeParams, $http, $route, $locati
     $http.get(`/api/date?month=${month}&day=${day}&year=${year}`)
     .then(function(topTen){
       if (topTen.data.hasOwnProperty('error')) throw 'Sorry, no top ten found for that date.';
-      recordLoader(false);
       $scope.songs = topTen.data;
-      $route.updateParams({month: $scope.month, day: $scope.day, year: $scope.year});
-    }).catch((e) => {
+      $location.path(`/${month}/${day}/${year}/`);
+      $scope.$on("$routeChangeSuccess", function(){
+        recordLoader(false);
+      });
+    }).catch(error => {
       recordLoader(false);
-      toggleErrorModal(e);
+      toggleErrorModal(error);
     });
   };
 
@@ -116,9 +129,6 @@ app.controller('mainCtrl', function($scope, $routeParams, $http, $route, $locati
       document.getElementById('record-loader').style.opacity = '0';
       setTimeout(() => {
         document.getElementById('record-loader').style.display = 'none';
-        if (document.getElementById('song1')){
-          $document.scrollToElement(angular.element(document.getElementById('song1')), 75, 300);
-        }
       }, 300);
     }
   };
@@ -132,17 +142,15 @@ app.controller('mainCtrl', function($scope, $routeParams, $http, $route, $locati
     $document.scrollToElement(angular.element(document.getElementsByTagName('body')[0]), 500, 500);
   }
 
-  // $scope.numberRangeToArr = function(start, end, max){
-  //   let arr = [start];
-  //   let iNum = max ? Math.ceil((end - start) / max) : 1;
-  //
-  //   for(let i = iNum + start; i < (end - iNum); i+=iNum){
-  //     arr.push(i);
-  //   }
-  //
-  //   arr.push(end);
-  //
-  //   return arr;
-  // }
+  $scope.numberRangeToArr = function(start, end, max){
+    let arr = [start];
+    let iNum =  Math.ceil((end - start) / max);
 
+    for(let i = (start + iNum); i <= (end - iNum); i+=iNum){
+      arr.push(i);
+    }
+
+    arr.push(end);
+    return arr;
+  }
 });

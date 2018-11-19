@@ -1,10 +1,55 @@
-html, body {
-  height: 100%;
-  min-height: 100%;
-  font-family: 'Inconsolata', monospace !important; }
+html {
+  position: relative;
+  min-height: calc(100% - 3rem); }
 
 body {
-  padding-bottom: 100px; }
+  height: 100%;
+  font-family: 'Inconsolata', monospace !important;
+  margin-bottom: 30px !important; }
+
+main {
+  position: absolute;
+  width: 100%; }
+
+@keyframes slide {
+  from {
+    transform: translateX(0); }
+  to {
+    transform: translateX(100%); } }
+
+@keyframes fade {
+  from {
+    opacity: 0; }
+  to {
+    opacity: 1; } }
+
+.top-ten-videos {
+  background: #fff;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05); }
+
+.top-ten.ng-enter {
+  animation: fadeIn 400ms; }
+
+.top-ten.ng-leave {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 101;
+  animation: slide 1s; }
+
+.date-picker.ng-enter {
+  z-index: 100;
+  animation: fade 1.5s; }
+
+.date-picker.ng-leave {
+  z-index: 100;
+  animation: fade 500ms;
+  animation-direction: reverse; }
+
+.ng-enter,
+.ng-leave {
+  transform: translateZ(0); }
 
 #record-loader {
   opacity: 0;
@@ -15,9 +60,10 @@ body {
   transition: opacity 300ms;
   height: 100vh;
   width: 100vw;
-  z-index: 10000;
+  z-index: 100000 !important;
   background-color: rgba(255, 255, 255, 0.95);
-  position: fixed; }
+  position: fixed;
+  top: 0; }
   #record-loader h1 {
     text-align: center; }
   #record-loader.toggle {
@@ -101,20 +147,30 @@ body {
 
 header h1 {
   font-family: 'Josefin Sans', sans-serif;
-  font-size: 15vw;
+  font-size: 10vw;
   margin-top: 6rem; }
+  @media only screen and (max-width: 450px) {
+    header h1 {
+      font-size: 15vw; } }
   @media only screen and (min-width: 768px) {
     header h1 {
-      font-size: 5rem; } }
+      font-size: 8vw; } }
+  header h1 .b-bg-color:after {
+    content: '';
+    height: 5px;
+    width: 5px;
+    background-color: blue;
+    border-radius: 50%; }
 
 .top-ten-date-header {
-  font-size: 4rem; }
+  font-size: 6vw; }
   @media only screen and (max-width: 768px) {
     .top-ten-date-header {
       font-size: 10vw; } }
 
 nav {
   position: fixed;
+  top: 0;
   height: 4rem;
   width: 100%;
   background: rgba(230, 230, 230, 0.95);
@@ -125,6 +181,10 @@ nav {
     position: absolute;
     top: 50%;
     transform: translateY(-50%); }
+  nav .fab:hover {
+    background-color: #000;
+    color: #fff;
+    transition: background-color 200ms, color 200ms; }
 
 .fa-ellipsis-v {
   position: absolute;
@@ -219,8 +279,23 @@ nav {
 
 .range {
   color: #ccc;
-  width: calc(100% - 10px);
+  width: 100%;
   margin: auto; }
+
+.range-marker {
+  position: relative;
+  text-align: center; }
+  .range-marker:after {
+    content: " ";
+    position: absolute;
+    bottom: -15px;
+    left: 0;
+    right: 0;
+    margin: auto;
+    width: 1px;
+    height: 10px;
+    border-left: 2px solid #000;
+    z-index: -1; }
 
 input[type="range"] {
   -webkit-appearance: none;
@@ -242,10 +317,11 @@ input[type="range"] {
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 50px;
+  width: 30px;
   height: 30px;
-  background: url("../images/slider-thumb.svg") no-repeat;
-  cursor: pointer; }
+  border: none;
+  cursor: pointer;
+  background: url("../images/slider-thumb.svg") no-repeat; }
 
 .btn-group:first-child {
   border-radius: 30px; }
@@ -285,6 +361,9 @@ input[type="range"]::-webkit-slider-thumb {
 
 .fa-arrow-up.active {
   opacity: 1 !important; }
+
+#song1 {
+  margin-top: 4rem; }
 
 .card {
   border-radius: 30px !important; }
@@ -366,12 +445,6 @@ input[type="range"]::-webkit-slider-thumb {
 footer {
   position: absolute;
   bottom: 0;
-  -webkit-box-pack: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
   width: 100%;
   height: 30px; }
   footer a {

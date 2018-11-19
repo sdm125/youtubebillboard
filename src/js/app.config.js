@@ -1,11 +1,18 @@
 'use strict';
 
-const app = angular.module('youtubeBillboard', ['ngRoute', 'duScroll']);
+const app = angular.module('youtubeBillboard', ['ngRoute', 'duScroll', 'ngAnimate']);
 
-app.config(($routeProvider, $locationProvider, $sceDelegateProvider) => {
-  $routeProvider.when('/:month?/:day?/:year?', {
-    templateUrl : 'templates/main.html',
+app.config(($routeProvider, $sceDelegateProvider) => {
+  $routeProvider.when('/', {
+    templateUrl: 'templates/datepicker.html',
     controller: 'mainCtrl'
+  })
+  .when('/:month/:day/:year', {
+    templateUrl: 'templates/topten.html',
+    controller: 'mainCtrl'
+  })
+  .otherwise({
+      redirectTo: '/'
   });
 
   $sceDelegateProvider.resourceUrlWhitelist([
