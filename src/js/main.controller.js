@@ -15,11 +15,12 @@ app.controller('mainCtrl', function($scope, $routeParams, $http, $route, $locati
   // Set initial date slider to year
   $scope.toggleDate = 'year';
 
+  $scope.viewData = {};
+
   // Set initial view class to date picker
-  $scope.viewClass = 'date-picker';
+  $scope.viewData.className = 'date-picker'; 
 
   // Make these values available to scope
-  $scope.shareUrl = window.location.href;
   $scope.currentYear = new Date().getFullYear();
 
   // Update monthLength on change of month and years
@@ -36,7 +37,7 @@ app.controller('mainCtrl', function($scope, $routeParams, $http, $route, $locati
       $http.get(`/api/date?month=${$scope.month}&day=${$scope.day}&year=${$scope.year}`)
       .then(function(topTen){
         if (topTen.data.hasOwnProperty('error')) throw 'Sorry, no top ten found for that date.';
-        $scope.viewClass = 'top-ten';
+        $scope.viewData.className = 'top-ten';
         $scope.songs = topTen.data;
         recordLoader(false);
       }).catch((e) => {
@@ -49,7 +50,7 @@ app.controller('mainCtrl', function($scope, $routeParams, $http, $route, $locati
     }
   }
 
-  $scope.dateSubmit = function(year, month, day){
+  $scope.dateSubmit = function(year, month, day) {
     $scope.songs = [];
     recordLoader(true);
     $http.get(`/api/date?month=${month}&day=${day}&year=${year}`)

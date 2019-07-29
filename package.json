@@ -9,21 +9,19 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "billboard-top-100": "^2.1.1",
-    "dotenv": "^5.0.1",
-    "express": "^4.16.3",
-    "moment": "^2.22.2",
-    "request-promise": "^4.2.2",
-    "youtube-search": "^1.1.1"
+    "billboard-top-100": "^2.4.18",
+    "express": "^4.17.1",
+    "moment": "^2.24.0",
+    "request-promise": "^4.2.4"
   },
   "devDependencies": {
     "gulp": "^3.9.1",
     "gulp-concat": "^2.6.1",
     "gulp-imagemin": "^4.1.0",
     "gulp-livereload": "^3.8.1",
-    "gulp-nodemon": "^2.2.1",
+    "gulp-nodemon": "^2.4.2",
     "gulp-sass": "^3.2.1",
-    "gulp-uglify": "^3.0.1",
+    "gulp-uglify": "^3.0.2",
     "main-bower-files": "^2.13.1"
   }
 }

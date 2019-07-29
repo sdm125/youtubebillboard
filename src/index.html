@@ -13,10 +13,10 @@
 
   <body ng-app="youtubeBillboard" ng-controller="mainCtrl">
     <div ng-include="'templates/recordloader.html'"></div>
-    <div ng-include="'templates/nav.html'"></div>
+    <div ng-controller="mainCtrl" ng-include="'templates/nav.html'"></div>
     <div ng-include="'templates/help.html'"></div>
     <div ng-include="'templates/errormodal.html'"></div>
-    <div ng-view class="{{ viewClass }}"></div>
+    <div ng-view class="{{ viewData.className }}"></div>
     <div ng-include="'templates/footer.html'"></div>
     <script src="vendor/angular/angular.js"></script>
     <script src="vendor/angular-route/angular-route.js"></script>

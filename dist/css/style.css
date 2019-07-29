@@ -24,8 +24,22 @@ main {
     opacity: 1; } }
 
 .top-ten-videos {
-  background: #fff;
-  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05); }
+  background: #fff; }
+  .top-ten-videos ul {
+    max-width: 650px; }
+    @media screen and (max-width: 767px) {
+      .top-ten-videos ul {
+        padding-right: 0; } }
+  .top-ten-videos .top-ten-title-block {
+    margin-top: 6rem;
+    width: 100%;
+    text-align: center;
+    max-width: 650px;
+    clear: both; }
+    .top-ten-videos .top-ten-title-block .fa-arrow-left {
+      color: #000;
+      float: left;
+      margin-top: 10px; }
 
 .top-ten.ng-enter {
   animation: fadeIn 400ms; }
@@ -50,6 +64,9 @@ main {
 .ng-enter,
 .ng-leave {
   transform: translateZ(0); }
+
+.ng-hide.ng-hide-animate {
+  display: none !important; }
 
 #record-loader {
   opacity: 0;
@@ -362,8 +379,51 @@ input[type="range"]::-webkit-slider-thumb {
 .fa-arrow-up.active {
   opacity: 1 !important; }
 
-#song1 {
-  margin-top: 4rem; }
+.song-item {
+  font-size: 1.25rem;
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between; }
+  @media screen and (max-width: 767px) {
+    .song-item {
+      flex-wrap: wrap;
+      justify-content: center; } }
+  .song-item > div {
+    width: 90%; }
+    @media screen and (max-width: 767px) {
+      .song-item > div {
+        width: 100%;
+        flex-wrap: wrap;
+        justify-content: center; } }
+  .song-item .title-rank {
+    width: 100%; }
+    @media screen and (max-width: 767px) {
+      .song-item .title-rank {
+        display: flex;
+        justify-content: center;
+        margin: 20px 0; } }
+  @media screen and (max-width: 767px) {
+    .song-item a {
+      width: 100%; } }
+  .song-item a:hover {
+    text-decoration: none !important; }
+  .song-item a button {
+    width: 100%;
+    justify-content: center;
+    border-radius: 20px; }
+  .song-item img {
+    border-radius: 50%;
+    min-height: 150px;
+    min-width: 150px;
+    max-height: 150px;
+    max-width: 150px; }
+  .song-item .no-cover {
+    height: 150px;
+    width: 150px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center; }
 
 .card {
   border-radius: 30px !important; }

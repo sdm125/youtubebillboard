@@ -12,7 +12,7 @@ app.config(($routeProvider, $sceDelegateProvider) => {
     controller: 'mainCtrl'
   })
   .otherwise({
-      redirectTo: '/'
+    redirectTo: '/'
   });
 
   $sceDelegateProvider.resourceUrlWhitelist([

@@ -14,11 +14,6 @@
       <h1 class="text-center mb-5 top-ten-date-header">{{ month | monthName }} {{ day || 'Day' }}, {{ year || 'YYYY' }}</h1>
       <form>
         <div class="mt-5 clearfix" style="margin:0;">
-          <div class="range" style="margin:0;">
-            <span class="range-marker" ng-show="toggleDate === 'month'" ng-repeat="month in numberRangeToArr(1, maxMonth, 6);">{{ month | monthName }}</span>
-            <span class="range-marker" ng-show="toggleDate === 'day'" ng-repeat="day in numberRangeToArr(1, maxDay, 6);">{{ day }}</span>
-            <span class="range-marker year" ng-show="toggleDate === 'year'" ng-repeat="year in numberRangeToArr(1958, maxYear, 6);">{{ year }}</span>
-          </div>
           <input type="range" min="1" max="{{ maxMonth }}" class="slider month" ng-show="toggleDate === 'month'" ng-model="month">
           <input type="range" min="1" max="{{ maxDay }}" class="slider day" ng-show="toggleDate === 'day'" ng-model="day">
           <input type="range" min="1958" max="{{ maxYear }}" class="slider year" ng-show="toggleDate === 'year'" ng-model="year">
@@ -33,14 +28,6 @@
             <i class="fas fa-play fa-1x"></i>
           </button>
         </div>
-        <!-- <div class="input-group"> -->
-          <!-- <h3>{{ year }}</h3> -->
-          <!-- <input type="range" min="1958" max="2018" class="slider" id="myRange" ng-model="year"> -->
-          <!-- <input id="date" type="text" class="form-control" autocomplete="off" ng-model="topTenDate" placeholder="YYYY/MM/DD"> -->
-          <!-- <div class="input-group-append"> -->
-            <!-- <button class="btn btn-outline-secondary" type="button" ng-click="dateSubmit(topTenDate)"><i class="fas fa-play fa-2x"></i></button> -->
-          <!-- </div> -->
-        <!-- </div> -->
       </form>
     </div>
   </div>
