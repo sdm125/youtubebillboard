@@ -1,6 +1,5 @@
 const express = require('express');
 const app = express();
-const env = require('dotenv').config();
 const path = require('path');
 const billboard = require('billboard-top-100').getChart;
 const moment = require('moment');
