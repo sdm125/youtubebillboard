@@ -117,7 +117,7 @@ app.controller('mainCtrl', function($scope, $routeParams, $http, $route, $locati
     month = month < 10 ? `0${month.replace('0', '')}` : month;
     day = day < 10 ? `0${day.replace('0', '')}` : day;
     let date = `${year}-${month}-${day}`;
-    return moment(date).isValid() && moment(moment(new Date()).diff(date, 'days')) > 0;
+    return moment(date).isValid() && moment(moment(new Date()).diff(date, 'days')) >= 0;
   }
 
   function recordLoader(toggle) {

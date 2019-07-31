@@ -28,7 +28,7 @@ app.get('/api/date', (req, res) => {
   let date = `${year}-${month}-${day}`;
 
   // Validate date
-  if (moment(date).isValid() && moment(moment(new Date()).diff(date, 'days')) > 0) {
+  if (moment(date).isValid() && moment(moment(new Date()).diff(date, 'days')) >= 0) {
     getTopTen(date).then((topTen) => {
       res.send(topTen);
     }).catch(e => {
