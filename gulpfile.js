@@ -3,6 +3,24 @@ const sass = require('gulp-sass');
 const nodemon = require('gulp-nodemon');
 const concat = require('gulp-concat');
 
+// Copy all HTML files
+gulp.task('copyHtml', () => {
+  return new Promise((resolve, reject) => {
+    gulp.src('src/*.html')
+    .pipe(gulp.dest('dist'))
+    resolve();
+  });
+});
+
+// Copy Template files
+gulp.task('copyTemplates', function(){
+  return new Promise((resolve, reject) => {
+    gulp.src('src/templates/*.html')
+      .pipe(gulp.dest('dist/templates'))
+    resolve();
+  });
+});
+
 // Compile SASS
 gulp.task('sass', () => {
   return new Promise((resolve, reject) => {
@@ -31,6 +49,8 @@ const server = () => {
 };
 
 const watch = () => {
+  gulp.watch('src/templates/*.html', gulp.series(['copyTemplates']));
+  gulp.watch('src/*.html', gulp.series(['copyHtml']));
   gulp.watch('src/js/*.js', gulp.series(['scripts']));
   gulp.watch('src/sass/*.scss', gulp.series(['sass']));
 };

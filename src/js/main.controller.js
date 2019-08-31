@@ -1,4 +1,4 @@
-app.controller('mainCtrl', function($scope, $routeParams, $http, $route, $location, $document) {
+app.controller('mainCtrl', function($rootScope, $scope, $routeParams, $http, $location, $document, viewClass, billboardDate) {
   // Get date values from URL or set to current date if no date in URL.
   $scope.month = parseInt($routeParams.month) || moment().month() + 1;
   $scope.day = parseInt($routeParams.day) || moment().date();
@@ -15,16 +15,16 @@ app.controller('mainCtrl', function($scope, $routeParams, $http, $route, $locati
   // Set initial date slider to year
   $scope.toggleDate = 'year';
 
-  $scope.viewData = {};
-
   // Set initial view class to date picker
-  $scope.viewData.className = 'date-picker'; 
+  viewClass.setViewClass('date-picker');
+  $scope.viewClass = viewClass.getViewClass();
+  $rootScope.$broadcast('viewClassUpdated');
 
   // Make these values available to scope
   $scope.currentYear = new Date().getFullYear();
 
   // Update monthLength on change of month and years
-  $scope.$watchGroup(['month', 'year'], function(newVal,oldVal) {
+  $scope.$watchGroup(['month', 'day', 'year'], function(newVal,oldVal) {
     if (newVal !== oldVal) {
       $scope.maxDay = $scope.year === moment().year() && $scope.month === moment().month() + 1 ? moment().date() : moment.prototype.monthLength();
       $scope.maxMonth = $scope.year === moment().year() ? moment().month() + 1 : 12;
@@ -37,7 +37,11 @@ app.controller('mainCtrl', function($scope, $routeParams, $http, $route, $locati
       $http.get(`/api/date?month=${$scope.month}&day=${$scope.day}&year=${$scope.year}`)
       .then(function(topTen){
         if (topTen.data.hasOwnProperty('error')) throw 'Sorry, no top ten found for that date.';
-        $scope.viewData.className = 'top-ten';
+        viewClass.setViewClass('top-ten');
+        $scope.viewClass = viewClass.getViewClass();
+        $rootScope.$broadcast('viewClassUpdated');
+        billboardDate.setBillboardDate($scope.month, $scope.day, $scope.year);
+        $rootScope.$broadcast('billBoardDateUpdated');
         $scope.songs = topTen.data;
         recordLoader(false);
       }).catch((e) => {
@@ -95,17 +99,5 @@ app.controller('mainCtrl', function($scope, $routeParams, $http, $route, $locati
 
   $scope.toTheTop = function() {
     $document.scrollToElement(angular.element(document.getElementsByTagName('body')[0]), 500, 500);
-  }
-
-  $scope.numberRangeToArr = function(start, end, max){
-    let arr = [start];
-    let iNum =  Math.ceil((end - start) / max);
-
-    for(let i = (start + iNum); i <= (end - iNum); i+=iNum){
-      arr.push(i);
-    }
-
-    arr.push(end);
-    return arr;
   }
 });

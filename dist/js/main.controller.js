@@ -36,6 +36,62 @@ app.directive("scroll", function ($window) {
   };
 });
 
+app.factory('viewClass', function() {
+  var service = {};
+  var _viewClass = '';
+
+  service.setViewClass = function(className) {
+    _viewClass = className;
+  }
+
+  service.getViewClass = function() {
+    return _viewClass;
+  }
+
+  return service;
+});
+
+app.factory('billboardDate', function() {
+  var service = {};
+  var _month = 0;
+  var _day = 0;
+  var _year = 0;
+
+  service.setBillboardDate = function(month, day, year) {
+    _month = month;
+    _day = day;
+    _year = year;
+  }
+
+  service.getBillboardMonth = function() {
+    return _month;
+  }
+
+  service.getBillboardDay = function() {
+    return _day;
+  }
+
+  service.getBillboardYear = function() {
+    return _year;
+  }
+
+  return service;
+});
+
+app.factory('toggleHelp', function() {
+  var service = {};
+  var _toggleHelp = false;
+
+  service.toggleHelp = function() {
+    _toggleHelp = !_toggleHelp;
+  }
+
+  service.getToggleHelp = function() {
+    return _toggleHelp;
+  }
+
+  return service;
+});
 app.filter('monthName', [() => {
   return monthNumber => {
     return [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
@@ -44,7 +100,24 @@ app.filter('monthName', [() => {
   };
 }]);
 
-app.controller('mainCtrl', function($scope, $routeParams, $http, $route, $location, $document) {
+app.controller('helpCtrl', function($scope, toggleHelp) {
+  $scope.help = toggleHelp.getToggleHelp();
+  $scope.$parent.$on('toggledHelp', function() {
+    $scope.help = toggleHelp.getToggleHelp();
+  })
+});
+app.controller('loaderCtrl', function($scope, billboardDate) {
+  $scope.month = billboardDate.getBillboardMonth();
+  $scope.day = billboardDate.getBillboardDay();
+  $scope.year = billboardDate.getBillboardYear();
+
+  $scope.$parent.$on('billBoardDateUpdated', function() {
+    $scope.month = billboardDate.getBillboardMonth();
+    $scope.day = billboardDate.getBillboardDay();
+    $scope.year = billboardDate.getBillboardYear();
+  });
+});
+app.controller('mainCtrl', function($rootScope, $scope, $routeParams, $http, $location, $document, viewClass, billboardDate) {
   // Get date values from URL or set to current date if no date in URL.
   $scope.month = parseInt($routeParams.month) || moment().month() + 1;
   $scope.day = parseInt($routeParams.day) || moment().date();
@@ -61,16 +134,16 @@ app.controller('mainCtrl', function($scope, $routeParams, $http, $route, $locati
   // Set initial date slider to year
   $scope.toggleDate = 'year';
 
-  $scope.viewData = {};
-
   // Set initial view class to date picker
-  $scope.viewData.className = 'date-picker'; 
+  viewClass.setViewClass('date-picker');
+  $scope.viewClass = viewClass.getViewClass();
+  $rootScope.$broadcast('viewClassUpdated');
 
   // Make these values available to scope
   $scope.currentYear = new Date().getFullYear();
 
   // Update monthLength on change of month and years
-  $scope.$watchGroup(['month', 'year'], function(newVal,oldVal) {
+  $scope.$watchGroup(['month', 'day', 'year'], function(newVal,oldVal) {
     if (newVal !== oldVal) {
       $scope.maxDay = $scope.year === moment().year() && $scope.month === moment().month() + 1 ? moment().date() : moment.prototype.monthLength();
       $scope.maxMonth = $scope.year === moment().year() ? moment().month() + 1 : 12;
@@ -83,7 +156,11 @@ app.controller('mainCtrl', function($scope, $routeParams, $http, $route, $locati
       $http.get(`/api/date?month=${$scope.month}&day=${$scope.day}&year=${$scope.year}`)
       .then(function(topTen){
         if (topTen.data.hasOwnProperty('error')) throw 'Sorry, no top ten found for that date.';
-        $scope.viewData.className = 'top-ten';
+        viewClass.setViewClass('top-ten');
+        $scope.viewClass = viewClass.getViewClass();
+        $rootScope.$broadcast('viewClassUpdated');
+        billboardDate.setBillboardDate($scope.month, $scope.day, $scope.year);
+        $rootScope.$broadcast('billBoardDateUpdated');
         $scope.songs = topTen.data;
         recordLoader(false);
       }).catch((e) => {
@@ -142,16 +219,24 @@ app.controller('mainCtrl', function($scope, $routeParams, $http, $route, $locati
   $scope.toTheTop = function() {
     $document.scrollToElement(angular.element(document.getElementsByTagName('body')[0]), 500, 500);
   }
+});
 
-  $scope.numberRangeToArr = function(start, end, max){
-    let arr = [start];
-    let iNum =  Math.ceil((end - start) / max);
+app.controller('navCtrl', function($scope, viewClass, billboardDate, toggleHelp) {
+  $scope.viewClass = viewClass.getViewClass();
+  $scope.showHelp = toggleHelp.getToggleHelp();
+  
+  $scope.help = function() {
+    toggleHelp.toggleHelp();
+    $scope.$parent.$broadcast('toggledHelp');
+  };
 
-    for(let i = (start + iNum); i <= (end - iNum); i+=iNum){
-      arr.push(i);
-    }
+  $scope.$parent.$on('viewClassUpdated', function() {
+    $scope.viewClass = viewClass.getViewClass();
+  })
 
-    arr.push(end);
-    return arr;
-  }
+  $scope.$parent.$on('billBoardDateUpdated', function() {
+    $scope.month = billboardDate.getBillboardMonth();
+    $scope.day = billboardDate.getBillboardDay();
+    $scope.year = billboardDate.getBillboardYear();
+  });
 });

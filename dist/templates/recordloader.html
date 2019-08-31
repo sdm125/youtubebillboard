@@ -6,6 +6,9 @@
         <div class="record-groove">
           <div class="record-groove">
             <div id="record-label">
+              <div id="record-label-text">
+                {{ month | monthName }} {{ day || 'Day' }} {{ year || 'Year' }}
+              </div>
               <div id="record-hole"></div>
             </div>
           </div>
