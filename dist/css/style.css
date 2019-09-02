@@ -158,6 +158,10 @@ main {
     #error-modal h2 {
       font-size: 1.5rem; } }
 
+.show-loader {
+  opacity: 1 !important;
+  display: flex !important; }
+
 .show-help,
 .show-error-modal {
   opacity: 1 !important;

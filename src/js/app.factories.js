@@ -25,31 +25,16 @@ app.factory('billboardDate', function() {
     _year = year;
   }
 
-  service.getBillboardMonth = function() {
+  service.getMonth = function() {
     return _month;
   }
 
-  service.getBillboardDay = function() {
+  service.getDay = function() {
     return _day;
   }
 
-  service.getBillboardYear = function() {
+  service.getYear = function() {
     return _year;
-  }
-
-  return service;
-});
-
-app.factory('toggleHelp', function() {
-  var service = {};
-  var _toggleHelp = false;
-
-  service.toggleHelp = function() {
-    _toggleHelp = !_toggleHelp;
-  }
-
-  service.getToggleHelp = function() {
-    return _toggleHelp;
   }
 
   return service;

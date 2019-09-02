@@ -1,9 +1,18 @@
-app.controller('mainCtrl', function($rootScope, $scope, $routeParams, $http, $location, $document, viewClass, billboardDate) {
-  // Get date values from URL or set to current date if no date in URL.
-  $scope.month = parseInt($routeParams.month) || moment().month() + 1;
-  $scope.day = parseInt($routeParams.day) || moment().date();
-  $scope.year = parseInt($routeParams.year) || moment().year();
+app.controller('mainCtrl', function($rootScope, $scope, $location, viewClass, billboardDate) {
+  $scope.month = billboardDate.getMonth() || 7;
+  $scope.day = billboardDate.getDay() || 16;
+  $scope.year = billboardDate.getYear() || parseInt(((moment().year() - 1958) / 2)+ 1958);
 
+  $scope.showMonthPlaceholder = billboardDate.getMonth() !== 0 ? false : true;
+  $scope.showDayPlaceholder = billboardDate.getDay() !== 0 ? false : true;
+  $scope.showYearPlaceholder = billboardDate.getYear() !== 0 ? false : true;
+
+  $scope.hidePlaceholder = function(placerholderName) {
+    if ($scope[placerholderName]) {
+      $scope[placerholderName] = false;
+    }
+  }
+ 
   // Date limits
   moment.prototype.monthLength = () => {
     return moment($scope.year + '-' + $scope.month, 'YYYY-MM').daysInMonth();
@@ -15,7 +24,7 @@ app.controller('mainCtrl', function($rootScope, $scope, $routeParams, $http, $lo
   // Set initial date slider to year
   $scope.toggleDate = 'year';
 
-  // Set initial view class to date picker
+  // Set view class to date picker
   viewClass.setViewClass('date-picker');
   $scope.viewClass = viewClass.getViewClass();
   $rootScope.$broadcast('viewClassUpdated');
@@ -31,73 +40,32 @@ app.controller('mainCtrl', function($rootScope, $scope, $routeParams, $http, $lo
     }
   });
 
-  if ($routeParams.month !== undefined && $routeParams.day !== undefined && $routeParams.year !== undefined) {
-    if (validateDate($routeParams.month, $routeParams.day, $routeParams.year)) {
-      recordLoader(true);
-      $http.get(`/api/date?month=${$scope.month}&day=${$scope.day}&year=${$scope.year}`)
-      .then(function(topTen){
-        if (topTen.data.hasOwnProperty('error')) throw 'Sorry, no top ten found for that date.';
-        viewClass.setViewClass('top-ten');
-        $scope.viewClass = viewClass.getViewClass();
-        $rootScope.$broadcast('viewClassUpdated');
-        billboardDate.setBillboardDate($scope.month, $scope.day, $scope.year);
-        $rootScope.$broadcast('billBoardDateUpdated');
-        $scope.songs = topTen.data;
-        recordLoader(false);
-      }).catch((e) => {
-        recordLoader(false);
-        toggleErrorModal(e);
-      });
+  $scope.dateSubmit = function() {
+    if (validateDate($scope.month, $scope.day, $scope.year)) {
+      billboardDate.setBillboardDate($scope.month, $scope.day, $scope.year);
+      $rootScope.$broadcast('billBoardDateUpdated');
+      $rootScope.$broadcast('toggleLoaderUpdated', true);
+      $location.path(`/${$scope.month}/${$scope.day}/${$scope.year}/`);
     }
     else {
-      toggleErrorModal('Please enter a valid date.')
+      toggleErrorModal('Please enter a valid date.');
     }
-  }
-
-  $scope.dateSubmit = function(year, month, day) {
-    $scope.songs = [];
-    recordLoader(true);
-    $http.get(`/api/date?month=${month}&day=${day}&year=${year}`)
-    .then(function(topTen){
-      if (topTen.data.hasOwnProperty('error')) throw 'Sorry, no top ten found for that date.';
-      $scope.songs = topTen.data;
-      $location.path(`/${month}/${day}/${year}/`);
-      $scope.$on("$routeChangeSuccess", function(){
-        recordLoader(false);
-      });
-    }).catch(error => {
-      recordLoader(false);
-      toggleErrorModal(error);
-    });
   };
 
   function validateDate(month, day, year) {
-    month = month < 10 ? `0${month.replace('0', '')}` : month;
-    day = day < 10 ? `0${day.replace('0', '')}` : day;
-    let date = `${year}-${month}-${day}`;
-    return moment(date).isValid() && moment(moment(new Date()).diff(date, 'days')) >= 0;
-  }
-
-  function recordLoader(toggle) {
-    if (toggle) {
-      // angular.element($document.find('#record-loader')).addClass('toggle')
-      document.getElementById('record-loader').style.opacity = '1';
-      document.getElementById('record-loader').style.display = 'flex';
+    if ($scope.showDayPlaceholder || $scope.showMonthPlaceholder || $scope.showYearPlaceholder) {
+      return false;
     }
     else {
-      document.getElementById('record-loader').style.opacity = '0';
-      setTimeout(() => {
-        document.getElementById('record-loader').style.display = 'none';
-      }, 300);
+      month = month < 10 ? `0${new Number(month).toString().replace('0', '')}` : month;
+      day = day < 10 ? `0${new Number(day).toString().replace('0', '')}` : day;
+      let date = `${year}-${month}-${day}`;
+      return moment(date).isValid() && moment(moment(new Date()).diff(date, 'days')) >= 0;
     }
-  };
-
-  function toggleErrorModal(msg) {
-    $scope.$parent.errorModal = !$scope.$parent.errorModal;
-    $scope.$parent.errorMessage = msg;
   }
 
-  $scope.toTheTop = function() {
-    $document.scrollToElement(angular.element(document.getElementsByTagName('body')[0]), 500, 500);
+  function toggleErrorModal(msg) {
+    $rootScope.errorModal = !$rootScope.errorModal;
+    $rootScope.errorMessage = msg;
   }
 });

@@ -27,25 +27,6 @@
           <a target="_blank" ng-href="https://www.youtube.com/results?search_query={{song.artist}}%20{{song.title}}"><button class="btn btn-outline-dark d-flex align-items-center"><strong>Search</strong>&nbsp;<i class="fab fa-youtube fa-2x"></i></button></a>
         </li>
       </ul>
-        <!-- <div id="song{{ $index + 1 }}"  class="col-lg-9"> -->
-          <!-- <div class="card">
-            <div class="card-body">
-              <div class="videowrapper">
-
-              </div>
-            </div>
-            <div class="card-footer clearfix">
-              <div class="row">
-                <div class="fa-stack fa-lg float-left col-xs-2">
-                  <i class="fas fa-star fa-stack-2x" ng-show="$index === 0"></i>
-                  <i class="far fa-circle fa-stack-2x" ng-show="$index !== 0"></i>
-                  <span class="fa-stack-1x" ng-class="$index === 0 ? 'star-rank-text' : 'circle-rank-text'">{{ song.rank }}</span>
-                </div>
-                <div class="col-xs-10"><strong>{{ song.title | uppercase }}</strong><br><span class="text-muted">{{ song.artist | uppercase }}</span></div>
-              </div>
-            </div>
-          </div> -->
-        <!-- </div> -->
       </div>
     </div>
     <i class="fas fa-arrow-up" ng-class="{ 'active' : boolChangeClass }" scroll ng-click="toTheTop()" ></i>

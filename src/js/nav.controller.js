@@ -1,19 +1,19 @@
-app.controller('navCtrl', function($scope, viewClass, billboardDate, toggleHelp) {
+app.controller('navCtrl', function($scope, viewClass, billboardDate) {
   $scope.viewClass = viewClass.getViewClass();
-  $scope.showHelp = toggleHelp.getToggleHelp();
+  $scope.showHelp = false;
   
   $scope.help = function() {
-    toggleHelp.toggleHelp();
-    $scope.$parent.$broadcast('toggledHelp');
+    $scope.showHelp = !$scope.showHelp;
+    $scope.$parent.$broadcast('toggledHelp', $scope.showHelp);
   };
 
-  $scope.$parent.$on('viewClassUpdated', function() {
+  $scope.$on('viewClassUpdated', function() {
     $scope.viewClass = viewClass.getViewClass();
   })
 
-  $scope.$parent.$on('billBoardDateUpdated', function() {
-    $scope.month = billboardDate.getBillboardMonth();
-    $scope.day = billboardDate.getBillboardDay();
-    $scope.year = billboardDate.getBillboardYear();
+  $scope.$on('billBoardDateUpdated', function() {
+    $scope.month = billboardDate.getMonth();
+    $scope.day = billboardDate.getDay();
+    $scope.year = billboardDate.getYear();
   });
 });

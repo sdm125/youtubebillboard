@@ -9,7 +9,7 @@ app.config(($routeProvider, $sceDelegateProvider) => {
   })
   .when('/:month/:day/:year', {
     templateUrl: 'templates/topten.html',
-    controller: 'mainCtrl'
+    controller: 'toptenCtrl'
   })
   .otherwise({
     redirectTo: '/'

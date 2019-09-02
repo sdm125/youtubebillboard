@@ -9,7 +9,7 @@ app.config(($routeProvider, $sceDelegateProvider) => {
   })
   .when('/:month/:day/:year', {
     templateUrl: 'templates/topten.html',
-    controller: 'mainCtrl'
+    controller: 'toptenCtrl'
   })
   .otherwise({
     redirectTo: '/'
@@ -63,35 +63,21 @@ app.factory('billboardDate', function() {
     _year = year;
   }
 
-  service.getBillboardMonth = function() {
+  service.getMonth = function() {
     return _month;
   }
 
-  service.getBillboardDay = function() {
+  service.getDay = function() {
     return _day;
   }
 
-  service.getBillboardYear = function() {
+  service.getYear = function() {
     return _year;
   }
 
   return service;
 });
 
-app.factory('toggleHelp', function() {
-  var service = {};
-  var _toggleHelp = false;
-
-  service.toggleHelp = function() {
-    _toggleHelp = !_toggleHelp;
-  }
-
-  service.getToggleHelp = function() {
-    return _toggleHelp;
-  }
-
-  return service;
-});
 app.filter('monthName', [() => {
   return monthNumber => {
     return [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
@@ -100,29 +86,42 @@ app.filter('monthName', [() => {
   };
 }]);
 
-app.controller('helpCtrl', function($scope, toggleHelp) {
-  $scope.help = toggleHelp.getToggleHelp();
-  $scope.$parent.$on('toggledHelp', function() {
-    $scope.help = toggleHelp.getToggleHelp();
-  })
-});
-app.controller('loaderCtrl', function($scope, billboardDate) {
-  $scope.month = billboardDate.getBillboardMonth();
-  $scope.day = billboardDate.getBillboardDay();
-  $scope.year = billboardDate.getBillboardYear();
-
-  $scope.$parent.$on('billBoardDateUpdated', function() {
-    $scope.month = billboardDate.getBillboardMonth();
-    $scope.day = billboardDate.getBillboardDay();
-    $scope.year = billboardDate.getBillboardYear();
+app.controller('helpCtrl', function($scope) {
+  $scope.$on('toggledHelp', function(event, toggle) {
+    $scope.help = toggle;
   });
 });
-app.controller('mainCtrl', function($rootScope, $scope, $routeParams, $http, $location, $document, viewClass, billboardDate) {
-  // Get date values from URL or set to current date if no date in URL.
-  $scope.month = parseInt($routeParams.month) || moment().month() + 1;
-  $scope.day = parseInt($routeParams.day) || moment().date();
-  $scope.year = parseInt($routeParams.year) || moment().year();
+app.controller('loaderCtrl', function($scope, billboardDate) {
+  $scope.showLoader = false;
+  $scope.month = billboardDate.getMonth();
+  $scope.day = billboardDate.getDay();
+  $scope.year = billboardDate.getYear();
 
+  $scope.$on('billBoardDateUpdated', function() {
+    $scope.month = billboardDate.getMonth();
+    $scope.day = billboardDate.getDay();
+    $scope.year = billboardDate.getYear();
+  });
+
+  $scope.$on('toggleLoaderUpdated', function(event, toggle) {
+    $scope.showLoader = toggle;
+  });
+});
+app.controller('mainCtrl', function($rootScope, $scope, $location, viewClass, billboardDate) {
+  $scope.month = billboardDate.getMonth() || 7;
+  $scope.day = billboardDate.getDay() || 16;
+  $scope.year = billboardDate.getYear() || parseInt(((moment().year() - 1958) / 2)+ 1958);
+
+  $scope.showMonthPlaceholder = billboardDate.getMonth() !== 0 ? false : true;
+  $scope.showDayPlaceholder = billboardDate.getDay() !== 0 ? false : true;
+  $scope.showYearPlaceholder = billboardDate.getYear() !== 0 ? false : true;
+
+  $scope.hidePlaceholder = function(placerholderName) {
+    if ($scope[placerholderName]) {
+      $scope[placerholderName] = false;
+    }
+  }
+ 
   // Date limits
   moment.prototype.monthLength = () => {
     return moment($scope.year + '-' + $scope.month, 'YYYY-MM').daysInMonth();
@@ -134,7 +133,7 @@ app.controller('mainCtrl', function($rootScope, $scope, $routeParams, $http, $lo
   // Set initial date slider to year
   $scope.toggleDate = 'year';
 
-  // Set initial view class to date picker
+  // Set view class to date picker
   viewClass.setViewClass('date-picker');
   $scope.viewClass = viewClass.getViewClass();
   $rootScope.$broadcast('viewClassUpdated');
@@ -150,93 +149,74 @@ app.controller('mainCtrl', function($rootScope, $scope, $routeParams, $http, $lo
     }
   });
 
-  if ($routeParams.month !== undefined && $routeParams.day !== undefined && $routeParams.year !== undefined) {
-    if (validateDate($routeParams.month, $routeParams.day, $routeParams.year)) {
-      recordLoader(true);
-      $http.get(`/api/date?month=${$scope.month}&day=${$scope.day}&year=${$scope.year}`)
-      .then(function(topTen){
-        if (topTen.data.hasOwnProperty('error')) throw 'Sorry, no top ten found for that date.';
-        viewClass.setViewClass('top-ten');
-        $scope.viewClass = viewClass.getViewClass();
-        $rootScope.$broadcast('viewClassUpdated');
-        billboardDate.setBillboardDate($scope.month, $scope.day, $scope.year);
-        $rootScope.$broadcast('billBoardDateUpdated');
-        $scope.songs = topTen.data;
-        recordLoader(false);
-      }).catch((e) => {
-        recordLoader(false);
-        toggleErrorModal(e);
-      });
+  $scope.dateSubmit = function() {
+    if (validateDate($scope.month, $scope.day, $scope.year)) {
+      billboardDate.setBillboardDate($scope.month, $scope.day, $scope.year);
+      $rootScope.$broadcast('billBoardDateUpdated');
+      $rootScope.$broadcast('toggleLoaderUpdated', true);
+      $location.path(`/${$scope.month}/${$scope.day}/${$scope.year}/`);
     }
     else {
-      toggleErrorModal('Please enter a valid date.')
+      toggleErrorModal('Please enter a valid date.');
     }
-  }
-
-  $scope.dateSubmit = function(year, month, day) {
-    $scope.songs = [];
-    recordLoader(true);
-    $http.get(`/api/date?month=${month}&day=${day}&year=${year}`)
-    .then(function(topTen){
-      if (topTen.data.hasOwnProperty('error')) throw 'Sorry, no top ten found for that date.';
-      $scope.songs = topTen.data;
-      $location.path(`/${month}/${day}/${year}/`);
-      $scope.$on("$routeChangeSuccess", function(){
-        recordLoader(false);
-      });
-    }).catch(error => {
-      recordLoader(false);
-      toggleErrorModal(error);
-    });
   };
 
   function validateDate(month, day, year) {
-    month = month < 10 ? `0${month.replace('0', '')}` : month;
-    day = day < 10 ? `0${day.replace('0', '')}` : day;
-    let date = `${year}-${month}-${day}`;
-    return moment(date).isValid() && moment(moment(new Date()).diff(date, 'days')) >= 0;
-  }
-
-  function recordLoader(toggle) {
-    if (toggle) {
-      // angular.element($document.find('#record-loader')).addClass('toggle')
-      document.getElementById('record-loader').style.opacity = '1';
-      document.getElementById('record-loader').style.display = 'flex';
+    if ($scope.showDayPlaceholder || $scope.showMonthPlaceholder || $scope.showYearPlaceholder) {
+      return false;
     }
     else {
-      document.getElementById('record-loader').style.opacity = '0';
-      setTimeout(() => {
-        document.getElementById('record-loader').style.display = 'none';
-      }, 300);
+      month = month < 10 ? `0${new Number(month).toString().replace('0', '')}` : month;
+      day = day < 10 ? `0${new Number(day).toString().replace('0', '')}` : day;
+      let date = `${year}-${month}-${day}`;
+      return moment(date).isValid() && moment(moment(new Date()).diff(date, 'days')) >= 0;
     }
-  };
+  }
 
   function toggleErrorModal(msg) {
-    $scope.$parent.errorModal = !$scope.$parent.errorModal;
-    $scope.$parent.errorMessage = msg;
+    $rootScope.errorModal = !$rootScope.errorModal;
+    $rootScope.errorMessage = msg;
   }
+});
+
+app.controller('navCtrl', function($scope, viewClass, billboardDate) {
+  $scope.viewClass = viewClass.getViewClass();
+  $scope.showHelp = false;
+  
+  $scope.help = function() {
+    $scope.showHelp = !$scope.showHelp;
+    $scope.$parent.$broadcast('toggledHelp', $scope.showHelp);
+  };
+
+  $scope.$on('viewClassUpdated', function() {
+    $scope.viewClass = viewClass.getViewClass();
+  })
+
+  $scope.$on('billBoardDateUpdated', function() {
+    $scope.month = billboardDate.getMonth();
+    $scope.day = billboardDate.getDay();
+    $scope.year = billboardDate.getYear();
+  });
+});
+app.controller('toptenCtrl', function($scope, $http, $document, viewClass, billboardDate) {
+  viewClass.setViewClass('top-ten');
+  $scope.viewClass = viewClass.getViewClass();
+  $scope.$parent.$broadcast('viewClassUpdated');
+
+  $http.get(`/api/date?month=${billboardDate.getMonth()}&day=${billboardDate.getDay()}&year=${billboardDate.getYear()}`)
+  .then(function(topTen){
+    if (topTen.data.hasOwnProperty('error')) {
+      throw 'Sorry, no top ten found for that date.';
+    }
+    else {
+      $scope.songs = topTen.data;
+      $rootScope.$broadcast('toggleLoaderUpdated', false);
+    }
+  }).catch(error => {
+    $scope.$parent.$broadcast('toggleLoaderUpdated', false);
+  });
 
   $scope.toTheTop = function() {
     $document.scrollToElement(angular.element(document.getElementsByTagName('body')[0]), 500, 500);
   }
-});
-
-app.controller('navCtrl', function($scope, viewClass, billboardDate, toggleHelp) {
-  $scope.viewClass = viewClass.getViewClass();
-  $scope.showHelp = toggleHelp.getToggleHelp();
-  
-  $scope.help = function() {
-    toggleHelp.toggleHelp();
-    $scope.$parent.$broadcast('toggledHelp');
-  };
-
-  $scope.$parent.$on('viewClassUpdated', function() {
-    $scope.viewClass = viewClass.getViewClass();
-  })
-
-  $scope.$parent.$on('billBoardDateUpdated', function() {
-    $scope.month = billboardDate.getBillboardMonth();
-    $scope.day = billboardDate.getBillboardDay();
-    $scope.year = billboardDate.getBillboardYear();
-  });
 });
