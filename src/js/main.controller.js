@@ -1,7 +1,7 @@
 app.controller('mainCtrl', function($rootScope, $scope, $location, viewClass, billboardDate) {
   $scope.month = billboardDate.getMonth() || 7;
   $scope.day = billboardDate.getDay() || 16;
-  $scope.year = billboardDate.getYear() || parseInt(((moment().year() - 1958) / 2)+ 1958);
+  $scope.year = billboardDate.getYear() || parseInt(((moment().year() - 1958) / 2) + 1958);
 
   $scope.showMonthPlaceholder = billboardDate.getMonth() !== 0 ? false : true;
   $scope.showDayPlaceholder = billboardDate.getDay() !== 0 ? false : true;
@@ -48,7 +48,7 @@ app.controller('mainCtrl', function($rootScope, $scope, $location, viewClass, bi
       $location.path(`/${$scope.month}/${$scope.day}/${$scope.year}/`);
     }
     else {
-      toggleErrorModal('Please enter a valid date.');
+      $rootScope.$broadcast('toggleErrorModalUpdated', {toggle: true, message: 'Please enter a valid date.'});
     }
   };
 
@@ -62,10 +62,5 @@ app.controller('mainCtrl', function($rootScope, $scope, $location, viewClass, bi
       let date = `${year}-${month}-${day}`;
       return moment(date).isValid() && moment(moment(new Date()).diff(date, 'days')) >= 0;
     }
-  }
-
-  function toggleErrorModal(msg) {
-    $rootScope.errorModal = !$rootScope.errorModal;
-    $rootScope.errorMessage = msg;
   }
 });

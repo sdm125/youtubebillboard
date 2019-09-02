@@ -86,13 +86,25 @@ app.filter('monthName', [() => {
   };
 }]);
 
+app.controller('errorModalCtrl', function($scope) {
+  $scope.showErrorModal = {};
+  $scope.errorModalMessage = {};
+  $scope.showErrorModal.toggle = false;
+  $scope.errorModalMessage.text = '';
+
+  $scope.$on('toggleErrorModalUpdated', function(event, args) {
+    $scope.showErrorModal.toggle = args.toggle;
+    $scope.errorModalMessage.text = args.message;
+  });
+});
 app.controller('helpCtrl', function($scope) {
   $scope.$on('toggledHelp', function(event, toggle) {
     $scope.help = toggle;
   });
 });
 app.controller('loaderCtrl', function($scope, billboardDate) {
-  $scope.showLoader = false;
+  $scope.showLoader = {};
+  $scope.showLoader.toggle = false;
   $scope.month = billboardDate.getMonth();
   $scope.day = billboardDate.getDay();
   $scope.year = billboardDate.getYear();
@@ -104,13 +116,13 @@ app.controller('loaderCtrl', function($scope, billboardDate) {
   });
 
   $scope.$on('toggleLoaderUpdated', function(event, toggle) {
-    $scope.showLoader = toggle;
+    $scope.showLoader.toggle = toggle;
   });
 });
 app.controller('mainCtrl', function($rootScope, $scope, $location, viewClass, billboardDate) {
   $scope.month = billboardDate.getMonth() || 7;
   $scope.day = billboardDate.getDay() || 16;
-  $scope.year = billboardDate.getYear() || parseInt(((moment().year() - 1958) / 2)+ 1958);
+  $scope.year = billboardDate.getYear() || parseInt(((moment().year() - 1958) / 2) + 1958);
 
   $scope.showMonthPlaceholder = billboardDate.getMonth() !== 0 ? false : true;
   $scope.showDayPlaceholder = billboardDate.getDay() !== 0 ? false : true;
@@ -157,7 +169,7 @@ app.controller('mainCtrl', function($rootScope, $scope, $location, viewClass, bi
       $location.path(`/${$scope.month}/${$scope.day}/${$scope.year}/`);
     }
     else {
-      toggleErrorModal('Please enter a valid date.');
+      $rootScope.$broadcast('toggleErrorModalUpdated', {toggle: true, message: 'Please enter a valid date.'});
     }
   };
 
@@ -171,11 +183,6 @@ app.controller('mainCtrl', function($rootScope, $scope, $location, viewClass, bi
       let date = `${year}-${month}-${day}`;
       return moment(date).isValid() && moment(moment(new Date()).diff(date, 'days')) >= 0;
     }
-  }
-
-  function toggleErrorModal(msg) {
-    $rootScope.errorModal = !$rootScope.errorModal;
-    $rootScope.errorMessage = msg;
   }
 });
 
@@ -198,7 +205,7 @@ app.controller('navCtrl', function($scope, viewClass, billboardDate) {
     $scope.year = billboardDate.getYear();
   });
 });
-app.controller('toptenCtrl', function($scope, $http, $document, viewClass, billboardDate) {
+app.controller('toptenCtrl', function($rootScope, $scope, $http, $document, viewClass, billboardDate) {
   viewClass.setViewClass('top-ten');
   $scope.viewClass = viewClass.getViewClass();
   $scope.$parent.$broadcast('viewClassUpdated');
@@ -213,7 +220,7 @@ app.controller('toptenCtrl', function($scope, $http, $document, viewClass, billb
       $rootScope.$broadcast('toggleLoaderUpdated', false);
     }
   }).catch(error => {
-    $scope.$parent.$broadcast('toggleLoaderUpdated', false);
+    $rootScope.$broadcast('toggleErrorModalUpdated', {toggle: true, message: 'Opps, something went wrong :('});
   });
 
   $scope.toTheTop = function() {

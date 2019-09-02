@@ -1,4 +1,4 @@
-app.controller('toptenCtrl', function($scope, $http, $document, viewClass, billboardDate) {
+app.controller('toptenCtrl', function($rootScope, $scope, $http, $document, viewClass, billboardDate) {
   viewClass.setViewClass('top-ten');
   $scope.viewClass = viewClass.getViewClass();
   $scope.$parent.$broadcast('viewClassUpdated');
@@ -13,7 +13,7 @@ app.controller('toptenCtrl', function($scope, $http, $document, viewClass, billb
       $rootScope.$broadcast('toggleLoaderUpdated', false);
     }
   }).catch(error => {
-    $scope.$parent.$broadcast('toggleLoaderUpdated', false);
+    $rootScope.$broadcast('toggleErrorModalUpdated', {toggle: true, message: 'Opps, something went wrong :('});
   });
 
   $scope.toTheTop = function() {
