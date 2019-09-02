@@ -3,7 +3,7 @@ app.controller('toptenCtrl', function($rootScope, $scope, $http, $document, view
   $scope.viewClass = viewClass.getViewClass();
   $scope.$parent.$broadcast('viewClassUpdated');
 
-  $http.get(`/api/date?month=${billboardDate.getMonth()}&day=${billboardDate.getDay()}&year=${billboardDate.getYear()}`)
+  $http.get(`/api/topten/date?month=${billboardDate.getMonth()}&day=${billboardDate.getDay()}&year=${billboardDate.getYear()}`)
   .then(function(topTen){
     if (topTen.data.hasOwnProperty('error')) {
       throw 'Sorry, no top ten found for that date.';

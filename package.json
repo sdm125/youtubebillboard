@@ -13,6 +13,7 @@
     "express": "^4.17.1",
     "moment": "^2.24.0",
     "osmosis": "^1.1.10",
+    "puppeteer": "^1.19.0",
     "request-promise": "^4.2.4"
   },
   "devDependencies": {

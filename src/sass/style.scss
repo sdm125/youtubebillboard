@@ -372,6 +372,8 @@ nav {
 
 .submit {
   border-radius: 20px !important;
+  box-shadow: 0 0px 4px 0 rgba(25, 33, 36, 0.14) !important; 
+  border-color: #343a4036 !important;
   margin: auto;
   width: 50%;
   &:hover {
@@ -381,8 +383,11 @@ nav {
 }
 
 .date-btns {
+  border-radius: 20px;
+  box-shadow: 0 0px 4px 0 rgba(25, 33, 36, 0.14); 
   button {
     width: 100%;
+    border-color: #343a4036;
   }
 }
 
