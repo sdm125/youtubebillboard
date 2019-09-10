@@ -1,0 +1,13 @@
+<div id="video-modal" class="container-fluid" ng-class="{'show-video-modal' : videoModal.toggle}">
+  <div class="d-flex flex-row flex-column justify-content-center">
+    <div class="col-lg-9 text-center d-flex justify-content-center align-items-center m-auto">
+      <div class="spinner-border text-danger" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+      <div class="videowrapper">
+        <iframe video-controls modal="videoModal" ng-src="{{videoModal.videoIdUrl}}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+    </div>
+    <button style="border-radius: 20px;" class="btn btn-lg btn-outline-dark mt-2 mx-auto w-50" ng-click="videoModal.toggle = !videoModal.toggle">Close</button>
+  </div>
+</div>
