@@ -12,3 +12,29 @@ app.directive("scroll", function ($window) {
     });
   };
 });
+
+app.directive("videoControls", function () {
+  return {
+    restrict: 'A',
+    scope: {
+      modal: '='
+    },
+    link: function(scope, element) {
+      scope.$watch('modal', function(newVal, oldVal) {
+        if (newVal.toggle !== oldVal.toggle && !newVal.toggle) {
+          element[0].contentWindow.postMessage('{"event":"command","func":"stopVideo","args":""}', '*');
+          setTimeout(function() {
+            element[0].style.opacity = '0';
+          }, 500);
+        }
+        else if (newVal.toggle !== oldVal.toggle && newVal.toggle) {
+          if (element[0].style.opacity === '0') {
+            element[0].onload = function() {
+              this.style.opacity = '1';
+            }
+          }
+        }
+      }, true);
+    }
+  };
+});

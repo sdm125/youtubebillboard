@@ -36,6 +36,32 @@ app.directive("scroll", function ($window) {
   };
 });
 
+app.directive("videoControls", function () {
+  return {
+    restrict: 'A',
+    scope: {
+      modal: '='
+    },
+    link: function(scope, element) {
+      scope.$watch('modal', function(newVal, oldVal) {
+        if (newVal.toggle !== oldVal.toggle && !newVal.toggle) {
+          element[0].contentWindow.postMessage('{"event":"command","func":"stopVideo","args":""}', '*');
+          setTimeout(function() {
+            element[0].style.opacity = '0';
+          }, 500);
+        }
+        else if (newVal.toggle !== oldVal.toggle && newVal.toggle) {
+          if (element[0].style.opacity === '0') {
+            element[0].onload = function() {
+              this.style.opacity = '1';
+            }
+          }
+        }
+      }, true);
+    }
+  };
+});
+
 app.factory('viewClass', function() {
   var service = {};
   var _viewClass = '';
@@ -210,6 +236,10 @@ app.controller('toptenCtrl', function($rootScope, $scope, $http, $document, view
   $scope.viewClass = viewClass.getViewClass();
   $scope.$parent.$broadcast('viewClassUpdated');
 
+  $scope.videoModal = {};
+  $scope.videoModal.toggle = false;
+  $scope.videoModal.videoIdUrl = '';
+
   $http.get(`/api/topten/date?month=${billboardDate.getMonth()}&day=${billboardDate.getDay()}&year=${billboardDate.getYear()}`)
   .then(function(topTen){
     if (topTen.data.hasOwnProperty('error')) {
@@ -222,6 +252,14 @@ app.controller('toptenCtrl', function($rootScope, $scope, $http, $document, view
   }).catch(error => {
     $rootScope.$broadcast('toggleErrorModalUpdated', {toggle: true, message: 'Opps, something went wrong :('});
   });
+
+  $scope.getVideoId = function(artist, song) {
+    $scope.videoModal.toggle = true;
+    var q = encodeURIComponent(artist) + '%20' + encodeURIComponent(song);
+    $http.get('/api/video/search/?q=' + q).then(function(response) {
+      $scope.videoModal.videoIdUrl = 'https://www.youtube.com/embed/' + response.data.id + '?version=3&enablejsapi=1';
+    });
+  }
 
   $scope.toTheTop = function() {
     $document.scrollToElement(angular.element(document.getElementsByTagName('body')[0]), 500, 500);

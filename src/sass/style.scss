@@ -174,6 +174,7 @@ main {
   }
 }
 
+#video-modal,
 #help,
 #error-modal {
   opacity: 0;
@@ -184,6 +185,7 @@ main {
   width: 100vw;
   padding: 20px;
   position: fixed;
+  top: 0;
   background: rgba(255, 255, 255, 0.95);
   z-index: -1;
   .flex-row {
@@ -202,6 +204,7 @@ main {
   display: flex !important;
 }
 
+.show-video-modal,
 .show-help,
 .show-error-modal {
   opacity: 1 !important;
@@ -623,8 +626,7 @@ input {
 
 .videowrapper {
   overflow: hidden;
-  border-radius: 30px 30px 0 0;
-  position: relative;
+  // position: relative;
   padding-bottom: 56.25%;
   height: 0;
   iframe {
@@ -634,6 +636,22 @@ input {
     width: 100%;
     height: 100%;
   }
+}
+
+@keyframes spinner-border {
+  to { transform: rotate(360deg); }
+}
+
+.spinner-border {
+  display: inline-block;
+  width: 100px;
+  height: 100px;
+  vertical-align: text-bottom;
+  border: .75em solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  -webkit-animation: spinner-border .75s linear infinite;
+  animation: spinner-border .75s linear infinite;
 }
 
 .video-card {

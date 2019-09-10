@@ -11,10 +11,10 @@ const errMsg = {
 const getTopTen = (date) => {
   let topTen = [];
   return new Promise((resolve, reject) => {
-  //   billboard('hot-100', date, (err, data) => {
-  //     console.log(data)
-  //     if (err) return reject(err)
-  //     console.log('Getting billboard data...')
+    // billboard('hot-100', date, (err, data) => {
+      // console.log(data)
+      // if (err) return reject(err)
+      // console.log('Getting billboard data...')
 
   let data = { songs:
     [ { rank: 1,
@@ -88,8 +88,8 @@ const getTopTen = (date) => {
         topTen.push(data.songs[i]);
       }
       resolve(topTen);
-    // });
-  });
+    });
+  // });
 };
 
 router.get('/date', (req, res) => {
