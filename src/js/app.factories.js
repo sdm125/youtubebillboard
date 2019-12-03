@@ -13,6 +13,36 @@ app.factory('viewClass', function() {
   return service;
 });
 
+app.factory('videoModalToggle', function() {
+  var service = {};
+  var _toggle = false;
+
+  service.setToggle = function(toggle) {
+    _toggle = toggle;
+  }
+
+  service.getToggle = function() {
+    return _toggle;
+  }
+
+  return service;
+});
+
+app.factory('toastToggle', function() {
+  var service = {};
+  var _toggle = false;
+
+  service.setToggle = function(toggle) {
+    _toggle = toggle;
+  }
+
+  service.getToggle = function() {
+    return _toggle;
+  }
+
+  return service;
+});
+
 app.factory('billboardDate', function() {
   var service = {};
   var _month = 0;

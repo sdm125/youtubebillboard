@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css?family=Josefin+Sans:700|Roboto+Mono|Inconsolata" rel="stylesheet">
   </head>
 
-  <body ng-app="youtubeBillboard" ng-controller="mainCtrl">
+  <body ng-app="youtubeBillboard" ng-controller="mainCtrl" ng-class="{ 'video-modal-open' : videoModalToggle }">
     <div ng-include="'templates/recordloader.html'" ng-controller="loaderCtrl"></div>
     <div ng-include="'templates/nav.html'" ng-controller="navCtrl"></div>
     <div ng-include="'templates/help.html'" ng-controller="helpCtrl"></div>

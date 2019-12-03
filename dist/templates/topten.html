@@ -1,21 +1,15 @@
 <div class="top-ten-videos">
   <div class="container">
     <div class="row d-flex justify-content-center">
-    <div class="top-ten-title-block">
-    </div>
-      <ul class="list-group col-12 mt-2-md">
-          <li id="song{{ $index + 1 }}" class="list-group-item song-item" ng-repeat="song in songs">
+      <ul class="list-group col-12">
+          <li class="list-group-item song-item" ng-repeat="song in songs">
             <div class="d-flex align-items-center">
-              <img ng-show="song.cover" ng-src="{{ song.cover }}" class="float-left">
-              <div ng-show="!song.cover" class="float-left no-cover">
-                  <img src="images/compact-disc-solid.svg">
-              </div>
               <div class="title-rank">
                 <div>
                   <div class="fa-stack fa-lg float-left col-xs-2">
-                    <i class="fas fa-star fa-stack-2x" ng-show="$index === 0"></i>
-                    <i class="far fa-circle fa-stack-2x" ng-show="$index !== 0"></i>
-                    <span class="fa-stack-1x" ng-class="$index === 0 ? 'star-rank-text' : 'circle-rank-text'">{{ song.rank }}</span>
+                    <i class="fas fa-star fa-stack-2x" ng-show="song.rank === 0"></i>
+                    <i class="far fa-circle fa-stack-2x" ng-show="song.rank  !== 0"></i>
+                    <span class="fa-stack-1x" ng-class="song.rank === 0 ? 'star-rank-text' : 'circle-rank-text'">{{ song.rank }}</span>
                   </div>
                 </div>
                 <div class="d-flex flex-column">
@@ -26,7 +20,7 @@
                 </div>
               </div>
             </div>
-            <button ng-click="getVideoId(song.artist, song.title)" class="btn btn-outline-dark d-flex align-items-center"><strong>Search</strong>&nbsp;<i class="fab fa-youtube fa-2x"></i></button>
+            <button ng-click="getVideoId(song.artist, song.title)" class="btn btn-outline-dark d-flex align-items-center"><strong>PLAY</strong>&nbsp;<i class="fab fa-youtube fa-2x"></i></button>
           </li>
       </ul>
     </div>
@@ -35,3 +29,11 @@
 </div>
 
 <div ng-include="'templates/videomodal.html'"></div>
+
+<div class="pages d-flex justify-content-center mt-5">
+  <i class="fas fa-chevron-left fa-2x mr-4" ng-click="getTopTen((page - 1) > 1 ? (page - 1 ): 10); updatePageMinMax(); toTheTop();"></i>
+  <button class="border-0 rounded-circle mr-1" ng-repeat="pg in [1,2,3,4,5,6,7,8,9,10]" ng-class="{ 'page-selected' : page === pg }" ng-show="pg >= minPage && pg <= maxPage" ng-click="getTopTen(pg);toTheTop();">{{ pg }}</button>
+  <i class="fas fa-chevron-right fa-2x ml-4" ng-click="getTopTen((page + 1) < 10 ? (page + 1) : 1); updatePageMinMax(); toTheTop();"></i>
+</div>
+
+<span ng-show="toastToggle" class="toast fade">Link Copied</span>

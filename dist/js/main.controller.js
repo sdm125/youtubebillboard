@@ -17,7 +17,7 @@ app.config(($routeProvider, $sceDelegateProvider) => {
 
   $sceDelegateProvider.resourceUrlWhitelist([
     'self',                    // trust all resources from the same origin
-    '*://www.youtube.com/**'   // trust all resources from `www.youtube.com`
+    'https://www.youtube.com/**'   // trust all resources from `www.youtube.com`
   ]);
 });
 
@@ -52,8 +52,13 @@ app.directive("videoControls", function () {
         }
         else if (newVal.toggle !== oldVal.toggle && newVal.toggle) {
           if (element[0].style.opacity === '0') {
-            element[0].onload = function() {
-              this.style.opacity = '1';
+            if (newVal.videoIdUrl === oldVal.videoIdUrl) {
+              element[0].style.opacity = '1';
+            }
+            else {
+              element[0].onload = function() {
+                this.style.opacity = '1';
+              }
             }
           }
         }
@@ -72,6 +77,36 @@ app.factory('viewClass', function() {
 
   service.getViewClass = function() {
     return _viewClass;
+  }
+
+  return service;
+});
+
+app.factory('videoModalToggle', function() {
+  var service = {};
+  var _toggle = false;
+
+  service.setToggle = function(toggle) {
+    _toggle = toggle;
+  }
+
+  service.getToggle = function() {
+    return _toggle;
+  }
+
+  return service;
+});
+
+app.factory('toastToggle', function() {
+  var service = {};
+  var _toggle = false;
+
+  service.setToggle = function(toggle) {
+    _toggle = toggle;
+  }
+
+  service.getToggle = function() {
+    return _toggle;
   }
 
   return service;
@@ -145,10 +180,17 @@ app.controller('loaderCtrl', function($scope, billboardDate) {
     $scope.showLoader.toggle = toggle;
   });
 });
-app.controller('mainCtrl', function($rootScope, $scope, $location, viewClass, billboardDate) {
+app.controller('mainCtrl', function($rootScope, $scope, $location, viewClass, videoModalToggle, billboardDate) {
   $scope.month = billboardDate.getMonth() || 7;
   $scope.day = billboardDate.getDay() || 16;
   $scope.year = billboardDate.getYear() || parseInt(((moment().year() - 1958) / 2) + 1958);
+
+  $scope.videoModalToggle = videoModalToggle.getToggle();
+
+  $scope.$on('videoModalToggleUpdated', function() {
+    $scope.videoModalToggle = videoModalToggle.getToggle();
+  });
+
 
   $scope.showMonthPlaceholder = billboardDate.getMonth() !== 0 ? false : true;
   $scope.showDayPlaceholder = billboardDate.getDay() !== 0 ? false : true;
@@ -212,18 +254,57 @@ app.controller('mainCtrl', function($rootScope, $scope, $location, viewClass, bi
   }
 });
 
-app.controller('navCtrl', function($scope, viewClass, billboardDate) {
+app.controller('navCtrl', function($scope, $location, $timeout, viewClass, videoModalToggle, billboardDate, toastToggle) {
   $scope.viewClass = viewClass.getViewClass();
+  $scope.videoModalToggle = videoModalToggle.getToggle();
   $scope.showHelp = false;
+  
+  $scope.$on('viewClassUpdated', function() {
+    $scope.viewClass = viewClass.getViewClass();
+  });
+
+  $scope.$on('videoModalToggleUpdated', function() {
+    $scope.videoModalToggle = videoModalToggle.getToggle();
+  });
+
+  // Found parts of this here https://stackoverflow.com/questions/43139185/how-to-copy-a-string-to-clipboard-with-ng-click-in-angularjs
+  $scope.copyLink = function(event) {
+    var body = document.querySelector('body');
+    var copyElement = document.createElement('textarea');
+    copyElement.style.height = 0;
+    copyElement.style.width = 0;
+    copyElement.style.position = 'absolute';
+    copyElement.style.top = '50000px';
+    copyElement.textContent = $location.$$absUrl;
+    body.appendChild(copyElement);
+    copyElement.select();
+    document.execCommand('copy');
+    body.removeChild(copyElement);
+
+    toastToggle.setToggle(true);
+    $scope.$parent.$broadcast('toastToggleUpdated', toastToggle.getToggle);
+    
+    $timeout(function() {
+      toastToggle.setToggle(false);
+      $scope.$parent.$broadcast('toastToggleUpdated', toastToggle.getToggle);
+    }, 3000);
+  };
   
   $scope.help = function() {
     $scope.showHelp = !$scope.showHelp;
     $scope.$parent.$broadcast('toggledHelp', $scope.showHelp);
   };
 
-  $scope.$on('viewClassUpdated', function() {
-    $scope.viewClass = viewClass.getViewClass();
-  })
+  $scope.back = function() {
+    if ($scope.videoModalToggle) {
+      $scope.videoModalToggle = !$scope.videoModalToggle;
+      videoModalToggle.setToggle($scope.videoModalToggle);
+      $scope.$parent.$broadcast('videoModalToggleUpdated');
+    }
+    else {
+      $location.path('/');
+    }
+  };
 
   $scope.$on('billBoardDateUpdated', function() {
     $scope.month = billboardDate.getMonth();
@@ -231,37 +312,75 @@ app.controller('navCtrl', function($scope, viewClass, billboardDate) {
     $scope.year = billboardDate.getYear();
   });
 });
-app.controller('toptenCtrl', function($rootScope, $scope, $http, $document, viewClass, billboardDate) {
+app.controller('toptenCtrl', function($rootScope, $scope, $routeParams, $http, $document, viewClass, videoModalToggle, toastToggle, billboardDate) {
   viewClass.setViewClass('top-ten');
   $scope.viewClass = viewClass.getViewClass();
   $scope.$parent.$broadcast('viewClassUpdated');
 
-  $scope.videoModal = {};
-  $scope.videoModal.toggle = false;
-  $scope.videoModal.videoIdUrl = '';
+  if (!billboardDate.getMonth() || !billboardDate.getDay() || !billboardDate.getYear()) {
+    billboardDate.setBillboardDate(parseInt($routeParams.month), parseInt($routeParams.day), parseInt($routeParams.year));
+    $rootScope.$broadcast('billBoardDateUpdated');
+  }
 
-  $http.get(`/api/topten/date?month=${billboardDate.getMonth()}&day=${billboardDate.getDay()}&year=${billboardDate.getYear()}`)
-  .then(function(topTen){
-    if (topTen.data.hasOwnProperty('error')) {
-      throw 'Sorry, no top ten found for that date.';
-    }
-    else {
-      $scope.songs = topTen.data;
-      $rootScope.$broadcast('toggleLoaderUpdated', false);
-    }
-  }).catch(error => {
-    $rootScope.$broadcast('toggleErrorModalUpdated', {toggle: true, message: 'Opps, something went wrong :('});
+  $scope.videoModal = {};
+  $scope.videoModal.toggle = videoModalToggle.getToggle();
+  $scope.videoModal.videoIdUrl = '';
+  $scope.page = 1;
+  $scope.minPage = 1;
+  $scope.maxPage = 5;
+
+  $scope.toastToggle = toastToggle.getToggle();
+
+  $scope.$on('toastToggleUpdated', function() {
+    $scope.toastToggle = toastToggle.getToggle();
   });
 
-  $scope.getVideoId = function(artist, song) {
-    $scope.videoModal.toggle = true;
-    var q = encodeURIComponent(artist) + '%20' + encodeURIComponent(song);
-    $http.get('/api/video/search/?q=' + q).then(function(response) {
-      $scope.videoModal.videoIdUrl = 'https://www.youtube.com/embed/' + response.data.id + '?version=3&enablejsapi=1';
+  $scope.$on('videoModalToggleUpdated', function() {
+    $scope.videoModal.toggle = videoModalToggle.getToggle();
+  });
+
+  $scope.closeVideoModal = function() {
+    $scope.videoModal.toggle = !$scope.videoModal.toggle;
+    videoModalToggle.setToggle($scope.videoModal.toggle);
+    $rootScope.$broadcast('videoModalToggleUpdated');
+  };
+
+  $scope.updatePageMinMax = function() {
+    $scope.maxPage = ($scope.page - 2) < 1 ? 5 : (($scope.page + 2) <= 10 ? ($scope.page + 2) : 10);
+    $scope.minPage = ($scope.page - 2) < 1 ? 1 : (($scope.page - 2) <= 6 ? ($scope.page - 2) : 6); 
+  };
+
+  $scope.getTopTen = function(page) {
+    $http.get(`/api/topten/date?month=${$scope.month}&day=${$scope.day}&year=${$scope.year}&page=${page}`)
+    .then(function(topTen){
+      if (topTen.data.hasOwnProperty('error')) {
+        throw 'Sorry, no top ten found for that date.';
+      }
+      else {
+        $scope.songs = topTen.data;
+        $rootScope.$broadcast('toggleLoaderUpdated', false);
+      }
+    }).catch(error => {
+      $rootScope.$broadcast('toggleErrorModalUpdated', {toggle: true, message: 'Opps, something went wrong :('});
     });
-  }
+
+    $scope.page = page;
+    $scope.updatePageMinMax();
+  };
+
+  $scope.getTopTen(1);
+
+  $scope.getVideoId = function(artist, song) {
+    videoModalToggle.setToggle(true);
+    $rootScope.$broadcast('videoModalToggleUpdated');
+    $scope.videoModal.toggle = videoModalToggle.getToggle();
+    $http.get('/api/video/search/?artist=' + encodeURIComponent(artist) + '&song=' + encodeURIComponent(song)).then(function(response) {
+      $scope.videoModal.videoIdUrl = 'https://www.youtube.com/embed/' + response.data.id + '?version=3&enablejsapi=1&playsinline=1';
+    });
+  };
 
   $scope.toTheTop = function() {
     $document.scrollToElement(angular.element(document.getElementsByTagName('body')[0]), 500, 500);
-  }
+  };
+  $scope.toTheTop();
 });

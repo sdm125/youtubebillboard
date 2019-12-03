@@ -1,5 +1,7 @@
 <nav class="clearfix">
-  <a ng-show="viewClass === 'top-ten'" href="/"><i class="fa fa-2x fa-arrow-left" aria-hidden="true"></i></a>
-  <div ng-show="viewClass === 'top-ten'" class="text-center h3">{{ month | monthName }} {{ day || 'Day' }}, {{ year || 'Year' }}</div>
+  <i ng-show="viewClass === 'top-ten'" ng-click="back()" class="fa fa-2x fa-arrow-left" aria-hidden="true"></i>
+  <div ng-show="viewClass === 'top-ten'" ng-click="copyLink($event)" class="text-center h3 top-ten-date">
+    <i class="fas fa-share-alt"></i> {{ month | monthName }} {{ day || 'Day' }}, {{ year || 'Year' }}
+  </div>
   <i class="fas fa-ellipsis-v fa-lg float-right" ng-click="help()"></i>
 </nav>

@@ -23,9 +23,9 @@
           <input type="range" min="1958" max="{{ maxYear }}" class="slider year" ng-show="toggleDate === 'year'" ng-model="year" ng-change="hidePlaceholder('showYearPlaceholder')">
         </div>
         <div class="btn-group d-flex justify-content-center date-btns mt-5">
-          <button style="border-radius: 20px 0 0 20px" type="button" ng-click="toggleDate = 'month'" ng-class="toggleDate === 'month' ? 'btn-active' : ''" class="btn btn-lg btn-outline-dark">Month</button>
-          <button type="button" ng-click="toggleDate = 'day'" ng-class="toggleDate === 'day' ? 'btn-active' : ''" class="btn btn-lg btn-outline-dark">Day</button>
-          <button style="border-radius: 0 20px 20px 0;" type="button" ng-click="toggleDate = 'year'" ng-class="toggleDate === 'year' ? 'btn-active' : ''" class="btn btn-lg btn-outline-dark">Year</button>
+          <button style="border-radius: 20px 0 0 20px" type="button" ng-click="toggleDate = 'month'" ng-class="toggleDate === 'month' ? 'btn-active' : ''" class="btn btn-lg btn-outline-dark btn-date-picker">Month</button>
+          <button type="button" ng-click="toggleDate = 'day'" ng-class="toggleDate === 'day' ? 'btn-active' : ''" class="btn btn-lg btn-outline-dark btn-date-picker">Day</button>
+          <button style="border-radius: 0 20px 20px 0;" type="button" ng-click="toggleDate = 'year'" ng-class="toggleDate === 'year' ? 'btn-active' : ''" class="btn btn-lg btn-outline-dark btn-date-picker">Year</button>
         </div>
         <div class="mt-5">
           <button class="btn btn-lg btn-outline-dark submit d-block" type="button" ng-click="dateSubmit()">

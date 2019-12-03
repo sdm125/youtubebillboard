@@ -1,7 +1,14 @@
-app.controller('mainCtrl', function($rootScope, $scope, $location, viewClass, billboardDate) {
+app.controller('mainCtrl', function($rootScope, $scope, $location, viewClass, videoModalToggle, billboardDate) {
   $scope.month = billboardDate.getMonth() || 7;
   $scope.day = billboardDate.getDay() || 16;
   $scope.year = billboardDate.getYear() || parseInt(((moment().year() - 1958) / 2) + 1958);
+
+  $scope.videoModalToggle = videoModalToggle.getToggle();
+
+  $scope.$on('videoModalToggleUpdated', function() {
+    $scope.videoModalToggle = videoModalToggle.getToggle();
+  });
+
 
   $scope.showMonthPlaceholder = billboardDate.getMonth() !== 0 ? false : true;
   $scope.showDayPlaceholder = billboardDate.getDay() !== 0 ? false : true;

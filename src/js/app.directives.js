@@ -29,8 +29,13 @@ app.directive("videoControls", function () {
         }
         else if (newVal.toggle !== oldVal.toggle && newVal.toggle) {
           if (element[0].style.opacity === '0') {
-            element[0].onload = function() {
-              this.style.opacity = '1';
+            if (newVal.videoIdUrl === oldVal.videoIdUrl) {
+              element[0].style.opacity = '1';
+            }
+            else {
+              element[0].onload = function() {
+                this.style.opacity = '1';
+              }
             }
           }
         }
