@@ -356,7 +356,7 @@ app.controller('toptenCtrl', function($rootScope, $scope, $routeParams, $http, $
   };
 
   $scope.getTopTen = function(page) {
-    $http.get(`/api/topten/date?month=${$scope.month}&day=${$scope.day}&year=${$scope.year}&page=${page}`)
+    $http.get(`/api/topten/date?month=${billboardDate.getMonth()}&day=${billboardDate.getDay()}&year=${billboardDate.getYear()}&page=${page}`)
     .then(function(topTen){
       if (topTen.data.hasOwnProperty('error')) {
         throw 'Sorry, no top ten found for that date.';
