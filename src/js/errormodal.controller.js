@@ -10,6 +10,7 @@ app.controller('errorModalCtrl', function($scope) {
 
     if (args.toggle) {
       $scope.$parent.$broadcast('toggleLoaderUpdated', false);
+      $location.path('/');
     }
   });
 });
