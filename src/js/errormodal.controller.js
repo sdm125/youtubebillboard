@@ -4,6 +4,8 @@ app.controller('errorModalCtrl', function($scope) {
   $scope.showErrorModal.toggle = false;
   $scope.errorModalMessage.text = '';
 
+  $scope.$parent.$broadcast('toggleLoaderUpdated', true);
+
   $scope.$on('toggleErrorModalUpdated', function(event, args) {
     $scope.showErrorModal.toggle = args.toggle;
     $scope.errorModalMessage.text = args.message;
