@@ -1,4 +1,4 @@
-app.controller('errorModalCtrl', function($scope) {
+app.controller('errorModalCtrl', function($scope, $location) {
   $scope.showErrorModal = {};
   $scope.errorModalMessage = {};
   $scope.showErrorModal.toggle = false;
