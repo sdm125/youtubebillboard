@@ -196,7 +196,6 @@ app.controller('mainCtrl', function($rootScope, $scope, $location, viewClass, vi
     $scope.videoModalToggle = videoModalToggle.getToggle();
   });
 
-
   $scope.showMonthPlaceholder = billboardDate.getMonth() !== 0 ? false : true;
   $scope.showDayPlaceholder = billboardDate.getDay() !== 0 ? false : true;
   $scope.showYearPlaceholder = billboardDate.getYear() !== 0 ? false : true;
@@ -351,8 +350,8 @@ app.controller('toptenCtrl', function($rootScope, $scope, $routeParams, $http, $
   };
 
   $scope.updatePageMinMax = function() {
-    $scope.maxPage = ($scope.page - 2) < 1 ? 5 : (($scope.page + 2) <= 10 ? ($scope.page + 2) : 10);
-    $scope.minPage = ($scope.page - 2) < 1 ? 1 : (($scope.page - 2) <= 6 ? ($scope.page - 2) : 6); 
+    $scope.maxPage = (($scope.page - 2) < 1) ? 5 : (($scope.page + 2) <= 10 ? ($scope.page + 2) : 10);
+    $scope.minPage = (($scope.page - 2) < 1) ? 1 : (($scope.page - 2) <= 6 ? ($scope.page - 2) : 6); 
   };
 
   $scope.getTopTen = function(page) {

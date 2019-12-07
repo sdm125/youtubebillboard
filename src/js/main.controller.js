@@ -9,7 +9,6 @@ app.controller('mainCtrl', function($rootScope, $scope, $location, viewClass, vi
     $scope.videoModalToggle = videoModalToggle.getToggle();
   });
 
-
   $scope.showMonthPlaceholder = billboardDate.getMonth() !== 0 ? false : true;
   $scope.showDayPlaceholder = billboardDate.getDay() !== 0 ? false : true;
   $scope.showYearPlaceholder = billboardDate.getYear() !== 0 ? false : true;
