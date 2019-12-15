@@ -35,7 +35,6 @@ const getTopTen = (date, page) => {
       }
       else {
         billboard('hot-100', date, (err, data) => {
-          console.log('got from api')
           if (err) return reject(err)
           console.log('Getting billboard data...');
           resolve(data.songs.slice(0, 10));
@@ -65,7 +64,6 @@ const storeSongsInDB = (songs, date) => {
                        [song.title, song.artist]),
       artist_id: db.raw('(select id from artists where name = ? limit 1)', [song.artist]),
       rank: song.rank,
-      date,
       start_date: db.raw('date_sub(?, interval dayofweek(?) - 1  day)', [date, date]),
       end_date: db.raw('date_add(?, interval 7 - dayofweek(?) day)', [date, date])
     });
