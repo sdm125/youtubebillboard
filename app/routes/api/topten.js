@@ -10,7 +10,9 @@ const errMsg = {
 };
 
 const doesChartExist = (date) => {
-  return db.select('id').from('charts').where('date', date).limit(1);
+  return db.select('id').from('charts')
+          .where('start_date', db.raw('date_sub(?, interval dayofweek(?) - 1  day)', [date, date]))
+          .limit(1);
 };
 
 const getTopTen = (date, page) => {
@@ -21,16 +23,19 @@ const getTopTen = (date, page) => {
         .from('charts AS c')
         .leftJoin('songs AS s', 's.id', 'c.song_id')
         .leftJoin('artists AS a', 'a.id', 'c.artist_id')
-        .where('c.date', date)
+        .where('c.start_date', db.raw('date_sub(?, interval dayofweek(?) - 1  day)', [date, date]))
+        .andWhere('c.end_date', db.raw('date_add(?, interval 7 - dayofweek(?) day)', [date, date]))
         .orderBy('c.rank')
         .limit(10).offset(((page * 10) - 10))
         .then(rows => {
+          console.log('got from db')
           resolve(JSON.stringify(rows))
         })
         .catch(err => console.log(err))
       }
       else {
         billboard('hot-100', date, (err, data) => {
+          console.log('got from api')
           if (err) return reject(err)
           console.log('Getting billboard data...');
           resolve(data.songs.slice(0, 10));
@@ -60,7 +65,9 @@ const storeSongsInDB = (songs, date) => {
                        [song.title, song.artist]),
       artist_id: db.raw('(select id from artists where name = ? limit 1)', [song.artist]),
       rank: song.rank,
-      date
+      date,
+      start_date: db.raw('date_sub(?, interval dayofweek(?) - 1  day)', [date, date]),
+      end_date: db.raw('date_add(?, interval 7 - dayofweek(?) day)', [date, date])
     });
 
     return inserts;
