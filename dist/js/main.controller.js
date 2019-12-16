@@ -205,14 +205,16 @@ app.controller('mainCtrl', function($rootScope, $scope, $location, viewClass, vi
       $scope[placerholderName] = false;
     }
   }
- 
+
+  var maxDate = moment(new Date()).subtract((moment().day() + 1), 'days').format("MM-DD-YYYY");
+
   // Date limits
   moment.prototype.monthLength = () => {
     return moment($scope.year + '-' + $scope.month, 'YYYY-MM').daysInMonth();
   }
   $scope.maxYear = moment().year();
-  $scope.maxMonth = $scope.year === moment().year() ? moment().month() + 1 : 12;
-  $scope.maxDay = $scope.year === moment().year() && $scope.month === moment().month() + 1 ? moment().date() : moment.prototype.monthLength();
+  $scope.maxMonth = $scope.year === moment().year() ? (moment(new Date(maxDate)).month() + 1) : 12;
+  $scope.maxDay = $scope.year === moment().year() && $scope.month === (moment().month() + 1) ? (moment(new Date(maxDate)).date()) : moment.prototype.monthLength();
 
   // Set initial date slider to year
   $scope.toggleDate = 'year';
@@ -228,7 +230,7 @@ app.controller('mainCtrl', function($rootScope, $scope, $location, viewClass, vi
   // Update monthLength on change of month and years
   $scope.$watchGroup(['month', 'day', 'year'], function(newVal,oldVal) {
     if (newVal !== oldVal) {
-      $scope.maxDay = $scope.year === moment().year() && $scope.month === moment().month() + 1 ? moment().date() : moment.prototype.monthLength();
+      $scope.maxDay = $scope.year === moment().year() && $scope.month === (moment().month() + 1) ? (moment(new Date(maxDate)).date()) : moment.prototype.monthLength();
       $scope.maxMonth = $scope.year === moment().year() ? moment().month() + 1 : 12;
     }
   });
