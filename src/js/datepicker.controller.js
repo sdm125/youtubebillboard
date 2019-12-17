@@ -1,4 +1,4 @@
-app.controller('mainCtrl', function($rootScope, $scope, $location, viewClass, videoModalToggle, billboardDate) {
+app.controller('datePickerCtrl', function($rootScope, $scope, $location, $http, viewClass, videoModalToggle, billboardDate) {
   $scope.month = billboardDate.getMonth() || 7;
   $scope.day = billboardDate.getDay() || 16;
   $scope.year = billboardDate.getYear() || parseInt(((moment().year() - 1958) / 2) + 1958);
@@ -49,6 +49,15 @@ app.controller('mainCtrl', function($rootScope, $scope, $location, viewClass, vi
       $scope.maxMonth = $scope.year === moment().year() ? (moment().month() + 1) : 12;
     }
   });
+
+  function getRandomSongs() {
+    $http.get('/api/topten/random/').then(function(res) {
+      $scope.randomSongs = res.data;
+      console.log($scope.randomSongs)
+    });
+  }
+
+  getRandomSongs();
 
   $scope.dateSubmit = function() {
     if (validateDate($scope.month, $scope.day, $scope.year)) {

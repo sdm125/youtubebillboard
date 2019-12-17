@@ -102,4 +102,21 @@ router.get('/date', (req, res) => {
   }
 });
 
+router.get('/random', (req, res) => {
+  db.raw(
+    `select *
+      from (
+        select distinct a.name, s.title, s.video_id, c.rank, c.end_date
+        from songs as s
+        left join artists as a on s.artist_id = a.id
+        left join charts as c on c.artist_id = a.id
+        where s.video_id is not null
+        ) as videos
+      order by rand()
+      limit 3;`
+  ).then(rows => {
+      res.send(JSON.stringify(rows[0]))
+  });
+});
+
 module.exports = router;

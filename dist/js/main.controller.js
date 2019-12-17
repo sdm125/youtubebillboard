@@ -5,7 +5,7 @@ const app = angular.module('youtubeBillboard', ['ngRoute', 'duScroll', 'ngAnimat
 app.config(($routeProvider, $sceDelegateProvider) => {
   $routeProvider.when('/', {
     templateUrl: 'templates/datepicker.html',
-    controller: 'mainCtrl'
+    controller: 'datePickerCtrl'
   })
   .when('/:month/:day/:year', {
     templateUrl: 'templates/topten.html',
@@ -147,45 +147,7 @@ app.filter('monthName', [() => {
   };
 }]);
 
-app.controller('errorModalCtrl', function($scope, $location) {
-  $scope.showErrorModal = {};
-  $scope.errorModalMessage = {};
-  $scope.showErrorModal.toggle = false;
-  $scope.errorModalMessage.text = '';
-
-  $scope.$on('toggleErrorModalUpdated', function(event, args) {
-    $scope.showErrorModal.toggle = args.toggle;
-    $scope.errorModalMessage.text = args.message;
-
-    if (args.toggle) {
-      $scope.$parent.$broadcast('toggleLoaderUpdated', false);
-      $location.path('/');
-    }
-  });
-});
-app.controller('helpCtrl', function($scope) {
-  $scope.$on('toggledHelp', function(event, toggle) {
-    $scope.help = toggle;
-  });
-});
-app.controller('loaderCtrl', function($scope, billboardDate) {
-  $scope.showLoader = {};
-  $scope.showLoader.toggle = false;
-  $scope.month = billboardDate.getMonth();
-  $scope.day = billboardDate.getDay();
-  $scope.year = billboardDate.getYear();
-
-  $scope.$on('billBoardDateUpdated', function() {
-    $scope.month = billboardDate.getMonth();
-    $scope.day = billboardDate.getDay();
-    $scope.year = billboardDate.getYear();
-  });
-
-  $scope.$on('toggleLoaderUpdated', function(event, toggle) {
-    $scope.showLoader.toggle = toggle;
-  });
-});
-app.controller('mainCtrl', function($rootScope, $scope, $location, viewClass, videoModalToggle, billboardDate) {
+app.controller('datePickerCtrl', function($rootScope, $scope, $location, $http, viewClass, videoModalToggle, billboardDate) {
   $scope.month = billboardDate.getMonth() || 7;
   $scope.day = billboardDate.getDay() || 16;
   $scope.year = billboardDate.getYear() || parseInt(((moment().year() - 1958) / 2) + 1958);
@@ -237,6 +199,15 @@ app.controller('mainCtrl', function($rootScope, $scope, $location, viewClass, vi
     }
   });
 
+  function getRandomSongs() {
+    $http.get('/api/topten/random/').then(function(res) {
+      $scope.randomSongs = res.data;
+      console.log($scope.randomSongs)
+    });
+  }
+
+  getRandomSongs();
+
   $scope.dateSubmit = function() {
     if (validateDate($scope.month, $scope.day, $scope.year)) {
       billboardDate.setBillboardDate($scope.month, $scope.day, $scope.year);
@@ -262,6 +233,44 @@ app.controller('mainCtrl', function($rootScope, $scope, $location, viewClass, vi
   }
 });
 
+app.controller('errorModalCtrl', function($scope, $location) {
+  $scope.showErrorModal = {};
+  $scope.errorModalMessage = {};
+  $scope.showErrorModal.toggle = false;
+  $scope.errorModalMessage.text = '';
+
+  $scope.$on('toggleErrorModalUpdated', function(event, args) {
+    $scope.showErrorModal.toggle = args.toggle;
+    $scope.errorModalMessage.text = args.message;
+
+    if (args.toggle) {
+      $scope.$parent.$broadcast('toggleLoaderUpdated', false);
+      $location.path('/');
+    }
+  });
+});
+app.controller('helpCtrl', function($scope) {
+  $scope.$on('toggledHelp', function(event, toggle) {
+    $scope.help = toggle;
+  });
+});
+app.controller('loaderCtrl', function($scope, billboardDate) {
+  $scope.showLoader = {};
+  $scope.showLoader.toggle = false;
+  $scope.month = billboardDate.getMonth();
+  $scope.day = billboardDate.getDay();
+  $scope.year = billboardDate.getYear();
+
+  $scope.$on('billBoardDateUpdated', function() {
+    $scope.month = billboardDate.getMonth();
+    $scope.day = billboardDate.getDay();
+    $scope.year = billboardDate.getYear();
+  });
+
+  $scope.$on('toggleLoaderUpdated', function(event, toggle) {
+    $scope.showLoader.toggle = toggle;
+  });
+});
 app.controller('navCtrl', function($scope, $location, $timeout, viewClass, videoModalToggle, billboardDate, toastToggle) {
   $scope.viewClass = viewClass.getViewClass();
   $scope.videoModalToggle = videoModalToggle.getToggle();

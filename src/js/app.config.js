@@ -5,7 +5,7 @@ const app = angular.module('youtubeBillboard', ['ngRoute', 'duScroll', 'ngAnimat
 app.config(($routeProvider, $sceDelegateProvider) => {
   $routeProvider.when('/', {
     templateUrl: 'templates/datepicker.html',
-    controller: 'mainCtrl'
+    controller: 'datePickerCtrl'
   })
   .when('/:month/:day/:year', {
     templateUrl: 'templates/topten.html',
