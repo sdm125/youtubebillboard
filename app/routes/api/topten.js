@@ -106,7 +106,7 @@ router.get('/random', (req, res) => {
   db.raw(
     `select *
       from (
-        select distinct a.name, s.title, s.video_id, c.rank, c.end_date
+        select distinct a.name, s.title, concat('https://www.youtube.com/embed/', s.video_id, '?version=3&enablejsapi=1&playsinline=1') as videoUrl, c.rank, c.end_date as date
         from songs as s
         left join artists as a on s.artist_id = a.id
         left join charts as c on c.artist_id = a.id

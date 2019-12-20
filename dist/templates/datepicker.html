@@ -35,4 +35,27 @@
       </form>
     </div>
   </div>
+
+  <div class="row mt-3">
+    <div class="col-md-4" ng-repeat="song in randomSongs">
+      <div class="card" style="overflow: hidden;">
+          <div style="position: relative;">
+              <div class="videowrapper">
+                  <iframe ng-src="{{song.videoUrl}}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+              </div>
+          </div>
+          <div class="d-flex align-items-center p-1">
+            <div class="fa-stack fa-lg float-left col-xs-2">
+              <i class="far fa-circle fa-stack-2x"></i>
+              <span class="fa-stack-1x circle-rank-text">{{ song.rank }}</span>
+            </div>
+            <div>
+                <p class="m-0">{{ song.title }}</p>
+                <p class="text-muted m-0">{{ song.name }}</p>
+                <p class="m-0">{{ song.date | date : mediumDate }}</p>
+            </div>
+          </div>
+      </div>
+    </div>
+  </div>
 </div>

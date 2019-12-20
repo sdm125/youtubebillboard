@@ -50,14 +50,10 @@ app.controller('datePickerCtrl', function($rootScope, $scope, $location, $http, 
     }
   });
 
-  function getRandomSongs() {
-    $http.get('/api/topten/random/').then(function(res) {
-      $scope.randomSongs = res.data;
-      console.log($scope.randomSongs)
-    });
-  }
-
-  getRandomSongs();
+  $http.get('/api/topten/random/').then(function(res) {
+    $scope.randomSongs = res.data;
+    console.log($scope.randomSongs)
+  });
 
   $scope.dateSubmit = function() {
     if (validateDate($scope.month, $scope.day, $scope.year)) {
