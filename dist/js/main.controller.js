@@ -151,6 +151,7 @@ app.controller('datePickerCtrl', function($rootScope, $scope, $location, $http, 
   $scope.month = billboardDate.getMonth() || 7;
   $scope.day = billboardDate.getDay() || 16;
   $scope.year = billboardDate.getYear() || parseInt(((moment().year() - 1958) / 2) + 1958);
+  $scope.currentYear = moment().year();
 
   $scope.videoModalToggle = videoModalToggle.getToggle();
 
@@ -201,7 +202,6 @@ app.controller('datePickerCtrl', function($rootScope, $scope, $location, $http, 
 
   $http.get('/api/topten/random/').then(function(res) {
     $scope.randomSongs = res.data;
-    console.log($scope.randomSongs)
   });
 
   $scope.dateSubmit = function() {
@@ -244,6 +244,9 @@ app.controller('errorModalCtrl', function($scope, $location) {
       $location.path('/');
     }
   });
+});
+app.controller('footerCtrl', function($scope) {
+  $scope.currentYear = new Date().getFullYear();
 });
 app.controller('helpCtrl', function($scope) {
   $scope.$on('toggledHelp', function(event, toggle) {
