@@ -38,11 +38,9 @@
 
   <div class="row mt-3">
     <div class="col-md-4" ng-repeat="song in randomSongs">
-      <div class="card mb-sm-3" style="overflow: hidden;">
-          <div style="position: relative;">
-              <div class="videowrapper">
-                  <iframe ng-src="{{song.videoUrl}}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-              </div>
+      <div class="card mb-3">
+          <div class="lazy-load-video-container">
+            <lazy-load-video iframeSrc="{{ song.videoUrl }}" imageSrc="{{ song.previewImg }}"></lazy-load-video>
           </div>
           <div class="d-flex align-items-center p-1">
             <div class="fa-stack fa-lg float-left col-xs-2">

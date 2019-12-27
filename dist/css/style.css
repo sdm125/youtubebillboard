@@ -422,6 +422,29 @@ input[type="range"]::-webkit-slider-thumb {
 .slider.year::-webkit-slider-thumb {
   background: url("../images/year_slider_btn.svg") no-repeat; }
 
+.lazy-load-video-container {
+  position: relative;
+  border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
+  overflow: hidden !important; }
+  .lazy-load-video-container .fa-youtube {
+    position: absolute;
+    font-size: 4rem;
+    color: #fff;
+    opacity: .75;
+    left: 0;
+    right: 0;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    cursor: pointer;
+    transition: opacity 200ms; }
+    .lazy-load-video-container .fa-youtube:hover {
+      color: #ff0100;
+      opacity: 1; }
+
 .btn-group:first-child {
   border-radius: 30px; }
 

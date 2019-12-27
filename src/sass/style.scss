@@ -506,6 +506,34 @@ input {
   }
 }
 
+.lazy-load-video-container {
+  position: relative;
+  border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
+  overflow: hidden !important;
+
+  .fa-youtube {
+    position: absolute;
+    font-size: 4rem;
+    color: #fff;
+    opacity: .75;
+    left: 0;
+    right: 0;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    cursor: pointer;
+    transition: opacity 200ms;
+
+    &:hover {
+      color: #ff0100;
+      opacity: 1;
+    }
+  }
+}
+
 .btn-group:first-child {
   border-radius: 30px;
 }
