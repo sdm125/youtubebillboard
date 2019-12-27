@@ -1,0 +1,203 @@
+.top-ten-videos {
+  background: #fff;
+
+  .list-group-item {
+    margin-bottom: 1rem;
+    border-radius: 0.25rem;
+    box-shadow: 0 0px 6px 0 rgba(25, 33, 36, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+  }
+
+  ul {
+    max-width: 650px;
+    margin-top: 5rem;
+
+    @media screen and (max-width: 767px) {
+      padding-right: 0;
+    }
+  }
+
+  .top-ten-title-block {
+    width: 100%;
+    text-align: center;
+    max-width: 650px;
+    clear: both;
+
+    @media screen and (min-width: 767px) {
+      margin-top: 6rem;
+    }
+
+    @media screen and (max-width: 767px) {
+      margin-top: 4rem;
+    }
+
+    .fa-arrow-left {
+      color: #000;
+      float: left;
+      padding: 0;
+    }
+  }
+}
+
+.top-ten {
+  &.ng-enter {
+    animation: fadeIn 400ms;
+  }
+
+  &.ng-leave {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    z-index: 101;
+    animation: slide 1s;
+  }
+}
+
+.toast {
+  background: #9c9c9c;
+  color: #fff;
+  padding: 10px;
+  border-radius: 20px;
+  position: fixed;
+  left: 0;
+  right: 0;
+  text-align: center;
+  bottom: 50px;
+  width: 200px;
+  margin: auto;
+  z-index: 400;
+  box-shadow: 0 0px 4px 0 rgba(25, 33, 36, 0.14) !important;
+  transition: all .5s linear;
+  
+  &.fade {
+    opacity: .95
+  }
+  &.fade.ng-hide {
+    opacity: 0;
+  }
+  &.fade.ng-hide-remove {
+    display: block !important;
+  }
+}
+
+.pages {
+  .fas {
+    cursor: pointer;
+  }
+
+  button {
+    padding: 0;
+    height: 35px;
+    width: 35px;
+    font-size: 1.3rem;
+    transition: background-color 250ms, color 250ms;
+    cursor: pointer;
+    
+    &.page-selected,
+    &:hover {
+      background: #333;
+      color: #fff;
+    }
+  }
+}
+
+.fa-stack{
+  margin: 0 12px;
+}
+
+.circle-rank-text {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.fa-arrow-up {
+  opacity: 0;
+  transition: opacity 250ms;
+  position: fixed;
+  background: rgba(255, 255, 255, .90);
+  right: 15px;
+  bottom: 10px;
+  border: 1px solid #00000029;
+  box-shadow: 0 0px 4px 0 rgba(25, 33, 36, 0.14);
+  border-radius: 50%;
+  padding: 10px 12px;
+  font-size: 1.75rem;
+  z-index: 100;
+}
+
+.fa-arrow-up.active {
+  opacity: 1 !important;
+}
+
+.song-item {
+  font-size: 1.25rem;
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between;
+
+  @media screen and (max-width: 767px) {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  > div {
+    width: 90%;
+
+    @media screen and (max-width: 767px) {
+      width: 100%;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+  }
+
+  button {
+    @media screen and (max-width: 767px) {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
+  .title-rank {
+    width: 100%;
+
+    @media screen and (max-width: 767px) {
+      display: flex;
+      justify-content: flex-start;
+      margin: 20px 0;
+    }
+  }
+
+  a {
+    @media screen and (max-width: 767px) {
+      width: 100%;
+    }
+
+    &:hover {
+      text-decoration: none !important;
+    }
+
+    button {
+      width: 100%;
+      justify-content: center;
+      border-radius: 20px;
+      border-color: #343a4021;
+      box-shadow: 0 0px 4px 0 rgba(25, 33, 36, 0.14);
+    }
+  }
+
+  img {
+    border-radius: 50%;
+    min-height: 150px;
+    min-width: 150px;
+    max-height: 150px;
+    max-width: 150px;
+  }
+
+  .no-cover {
+    height: 150px;
+    width: 150px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}

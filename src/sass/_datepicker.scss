@@ -1,0 +1,172 @@
+#date{
+  padding: 0.375rem 0.75rem;
+  font-size: 2.5rem;
+  line-height: 1.5;
+  border: 2px solid #000;
+  border-right: none;
+  border-radius: 50px 0 0 50px;
+  font-weight: 900;
+  text-align: center;
+  color: #000 !important;
+
+  &::placeholder {
+    color: #ccc;
+  }
+  
+  @media only screen and (max-width: 768px) {
+    font-size: 7vw;
+  }
+}
+
+.date-picker {
+  &.ng-enter {
+    z-index: 100;
+    animation: fade 1.5s;
+  }
+
+  &.ng-leave {
+    z-index: 100;
+    animation: fade 500ms;
+    animation-direction: reverse;
+  }
+}
+
+.top-ten-date-header {
+  font-size: 5vw;
+
+  @media only screen and (max-width: 768px) {
+    font-size: 10vw;
+  }
+}
+
+.fa-youtube {
+  color: #ff0000;
+  margin-right: 3px;
+}
+
+.submit {
+  margin: auto;
+  width: 50%;
+
+  &:hover {
+    background-color: #ff0000 !important;
+    color: #fff;
+  }
+}
+
+.date-btns {
+  border-radius: 20px;
+  box-shadow: 0 0px 4px 0 rgba(25, 33, 36, 0.14); 
+
+  button {
+    width: 100%;
+    border-color: #343a4036;
+  }
+}
+
+.range {
+  color: #ccc;
+  width: 100%;
+  margin: auto;
+}
+
+.range-marker {
+  position: relative;
+  text-align: center;
+  
+  &:after {
+    content: " ";
+    position: absolute;
+    bottom: -15px;
+    left: 0;
+    right: 0;
+    margin: auto;
+    width: 1px;
+    height: 10px;
+    border-left: 2px solid #000;
+    z-index: -1;
+  }
+}
+
+input[type="range"] {
+  -webkit-appearance: none;  /* Override default CSS styles */
+  appearance: none;
+  width: 100%; /* Full-width */
+  height: 8px; /* Specified height */
+  background: #222; /* Grey background */
+  outline: none; /* Remove outline */
+  // opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+  -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+  transition: opacity .2s;
+  border-radius: 20px;
+}
+
+input {
+  &[type="range"] {
+    &::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 30px;
+      height: 30px;
+      border: none;
+      cursor: pointer;
+    }
+  }
+}
+
+.slider {
+  &.month {
+    &::-webkit-slider-thumb {
+      background: url('../images/month_slider_btn.svg') no-repeat;
+    }
+  }
+
+  &.day {
+    &::-webkit-slider-thumb {
+      background: url('../images/day_slider_btn.svg') no-repeat;
+    }
+  }
+
+  &.year {
+    &::-webkit-slider-thumb {
+      background: url('../images/year_slider_btn.svg') no-repeat;
+    }
+  }
+}
+
+.lazy-load-video-container {
+  position: relative;
+  border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
+  overflow: hidden !important;
+
+  .fa-youtube {
+    position: absolute;
+    font-size: 4rem;
+    color: #fff;
+    opacity: .75;
+    left: 0;
+    right: 0;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    cursor: pointer;
+    transition: opacity 200ms;
+
+    &:hover {
+      color: #ff0100;
+      opacity: 1;
+    }
+  }
+}
+
+.btn-group:first-child {
+  border-radius: 30px;
+}
+
+.btn-active {
+  background-color: #222 !important;
+  color: #fff !important;
+}

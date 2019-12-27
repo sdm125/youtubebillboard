@@ -1,0 +1,22 @@
+@keyframes slide {
+  from    { transform:translateX(0); }
+  to      { transform: translateX(100%); }
+}
+
+@keyframes fade {
+  from    { opacity: 0; }
+  to      { opacity: 1; }
+}
+
+@keyframes spinner-border {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to{
+    transform: rotate(360deg);
+  }
+}
