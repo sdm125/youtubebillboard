@@ -29,7 +29,8 @@ body {
   transform: translateZ(0); }
 
 .card {
-  border-radius: 30px !important; }
+  border-radius: 30px !important;
+  box-shadow: 0 0px 4px 0 rgba(25, 33, 36, 0.14) !important; }
   .card .card-footer {
     background: #fff;
     font-size: 1.25rem;
