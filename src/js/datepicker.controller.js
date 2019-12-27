@@ -1,4 +1,5 @@
-app.controller('datePickerCtrl', function($rootScope, $scope, $location, $http, viewClass, videoModalToggle, billboardDate) {
+app.controller('datePickerCtrl', function($document, $rootScope, $scope, $location, $http, viewClass, videoModalToggle, billboardDate) {
+  $document.scrollToElement(angular.element(document.getElementsByTagName('body')[0]), 500, 500);
   $scope.month = billboardDate.getMonth() || 7;
   $scope.day = billboardDate.getDay() || 16;
   $scope.year = billboardDate.getYear() || parseInt(((moment().year() - 1958) / 2) + 1958);
