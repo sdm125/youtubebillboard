@@ -295,7 +295,8 @@ nav {
 .btn:not(.btn-date-picker) {
   border-radius: 20px !important;
   box-shadow: 0 0px 4px 0 rgba(25, 33, 36, 0.14) !important;
-  border-color: #343a4036 !important; }
+  border-color: #343a4036 !important;
+  background-color: #fff; }
 
 .btn:focus,
 .btn.focus {
