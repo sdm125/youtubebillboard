@@ -209,7 +209,7 @@ app.filter('monthName', [() => {
   };
 }]);
 
-app.controller('datePickerCtrl', function(
+app.controller('datePickerCtrl', function (
   $document,
   $rootScope,
   $scope,
@@ -232,7 +232,7 @@ app.controller('datePickerCtrl', function(
 
   $scope.videoModalToggle = videoModalToggle.getToggle();
 
-  $scope.$on('videoModalToggleUpdated', function() {
+  $scope.$on('videoModalToggleUpdated', function () {
     $scope.videoModalToggle = videoModalToggle.getToggle();
   });
 
@@ -240,7 +240,7 @@ app.controller('datePickerCtrl', function(
   $scope.showDayPlaceholder = billboardDate.getDay() !== 0 ? false : true;
   $scope.showYearPlaceholder = billboardDate.getYear() !== 0 ? false : true;
 
-  $scope.hidePlaceholder = function(placerholderName) {
+  $scope.hidePlaceholder = function (placerholderName) {
     if ($scope[placerholderName]) {
       $scope[placerholderName] = false;
     }
@@ -257,7 +257,7 @@ app.controller('datePickerCtrl', function(
   // If selected year is current year and selected month is m max month, maxDay is previous saturday
   // otherwise maxDay is number of days in month.
   $scope.maxDay =
-    $scope.year === moment().year() && $scope.maxMonth === maxDate.month() + 1
+    $scope.year === moment().year() && $scope.month === maxDate.month() + 1
       ? maxDate.date()
       : moment.prototype.monthLength();
 
@@ -273,24 +273,23 @@ app.controller('datePickerCtrl', function(
   $scope.currentYear = new Date().getFullYear();
 
   // Update monthLength on change of month and years
-  $scope.$watchGroup(['month', 'day', 'year'], function(newVal, oldVal) {
+  $scope.$watchGroup(['month', 'day', 'year'], function (newVal, oldVal) {
     if (newVal !== oldVal) {
       $scope.maxMonth =
         $scope.year === moment().year() ? maxDate.month() + 1 : 12;
 
       $scope.maxDay =
-        $scope.year === moment().year() &&
-        $scope.maxMonth === maxDate.month() + 1
+        $scope.year === moment().year() && $scope.maxMonth === $scope.month
           ? maxDate.date()
           : moment.prototype.monthLength();
     }
   });
 
-  $http.get('/api/topten/random/').then(function(res) {
+  $http.get('/api/topten/random/').then(function (res) {
     $scope.randomSongs = res.data;
   });
 
-  $scope.dateSubmit = function() {
+  $scope.dateSubmit = function () {
     if (validateDate($scope.month, $scope.day, $scope.year)) {
       billboardDate.setBillboardDate($scope.month, $scope.day, $scope.year);
       $rootScope.$broadcast('billBoardDateUpdated');
@@ -299,7 +298,7 @@ app.controller('datePickerCtrl', function(
     } else {
       $rootScope.$broadcast('toggleErrorModalUpdated', {
         toggle: true,
-        message: 'Please enter a valid date.'
+        message: 'Please enter a valid date.',
       });
     }
   };
