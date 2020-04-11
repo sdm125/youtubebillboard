@@ -18,9 +18,9 @@
       </h1>
       <form>
         <div class="mt-5 clearfix" style="margin:0;">
-          <input type="range" min="1" max="{{ maxMonth }}" class="slider month" ng-show="toggleDate === 'month'" ng-model="month" ng-change="hidePlaceholder('showMonthPlaceholder')">
-          <input type="range" min="1" max="{{ maxDay }}" class="slider day" ng-show="toggleDate === 'day'" ng-model="day" ng-change="hidePlaceholder('showDayPlaceholder')">
-          <input type="range" min="1958" max="{{ maxYear }}" class="slider year" ng-show="toggleDate === 'year'" ng-model="year" ng-change="hidePlaceholder('showYearPlaceholder')">
+          <input type="range" min="1" max="{{ maxMonth }}" class="slider month" ng-show="toggleDate === 'month'" ng-model="month" ng-mousedown="hidePlaceholder('showMonthPlaceholder')" my-touchstart="hidePlaceholder('showMonthPlaceholder')">
+          <input type="range" min="1" max="{{ maxDay }}" class="slider day" ng-show="toggleDate === 'day'" ng-model="day" ng-mousedown="hidePlaceholder('showDayPlaceholder')" my-touchstart="hidePlaceholder('showDayPlaceholder')">
+          <input type="range" min="1958" max="{{ maxYear }}" class="slider year" ng-show="toggleDate === 'year'" ng-model="year" ng-mousedown="hidePlaceholder('showYearPlaceholder')" my-touchstart="hidePlaceholder('showYearPlaceholder')">
         </div>
         <div class="btn-group d-flex justify-content-center date-btns mt-5">
           <button style="border-radius: 20px 0 0 20px" type="button" ng-click="toggleDate = 'month'" ng-class="toggleDate === 'month' ? 'btn-active' : ''" class="btn btn-lg btn-outline-dark btn-date-picker">Month</button>

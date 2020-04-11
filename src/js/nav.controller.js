@@ -1,56 +1,68 @@
-app.controller('navCtrl', function($scope, $location, $timeout, viewClass, videoModalToggle, billboardDate, toastToggle) {
+app.controller('navCtrl', function (
+  $scope,
+  $location,
+  $timeout,
+  viewClass,
+  videoModalToggle,
+  billboardDate,
+  toastToggle
+) {
   $scope.viewClass = viewClass.getViewClass();
   $scope.videoModalToggle = videoModalToggle.getToggle();
   $scope.showHelp = false;
-  
-  $scope.$on('viewClassUpdated', function() {
+
+  $scope.$on('viewClassUpdated', function () {
     $scope.viewClass = viewClass.getViewClass();
   });
 
-  $scope.$on('videoModalToggleUpdated', function() {
+  $scope.$on('videoModalToggleUpdated', function () {
     $scope.videoModalToggle = videoModalToggle.getToggle();
   });
 
-  // Found parts of this here https://stackoverflow.com/questions/43139185/how-to-copy-a-string-to-clipboard-with-ng-click-in-angularjs
-  $scope.copyLink = function(event) {
-    var body = document.querySelector('body');
-    var copyElement = document.createElement('textarea');
-    copyElement.style.height = 0;
-    copyElement.style.width = 0;
-    copyElement.style.position = 'absolute';
-    copyElement.style.top = '50000px';
-    copyElement.textContent = $location.$$absUrl;
-    body.appendChild(copyElement);
-    copyElement.select();
+  // https://stackoverflow.com/questions/29267589/angularjs-copy-to-clipboard
+  $scope.copyLink = function () {
+    // create temp element
+    var copyElement = document.createElement('span');
+    copyElement.appendChild(document.createTextNode($location.$$absUrl));
+    copyElement.id = 'tempCopyToClipboard';
+    angular.element(document.body.append(copyElement));
+
+    // select the text
+    var range = document.createRange();
+    range.selectNode(copyElement);
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(range);
+
+    // copy & cleanup
     document.execCommand('copy');
-    body.removeChild(copyElement);
+    window.getSelection().removeAllRanges();
+    copyElement.remove();
 
     toastToggle.setToggle(true);
     $scope.$parent.$broadcast('toastToggleUpdated', toastToggle.getToggle);
-    
-    $timeout(function() {
+
+    $timeout(function () {
       toastToggle.setToggle(false);
       $scope.$parent.$broadcast('toastToggleUpdated', toastToggle.getToggle);
     }, 3000);
   };
-  
-  $scope.help = function() {
+
+  $scope.help = function () {
     $scope.showHelp = !$scope.showHelp;
     $scope.$parent.$broadcast('toggledHelp', $scope.showHelp);
   };
 
-  $scope.back = function() {
+  $scope.back = function () {
     if ($scope.videoModalToggle) {
       $scope.videoModalToggle = !$scope.videoModalToggle;
       videoModalToggle.setToggle($scope.videoModalToggle);
       $scope.$parent.$broadcast('videoModalToggleUpdated');
-    }
-    else {
+    } else {
       $location.path('/');
     }
   };
 
-  $scope.$on('billBoardDateUpdated', function() {
+  $scope.$on('billBoardDateUpdated', function () {
     $scope.month = billboardDate.getMonth();
     $scope.day = billboardDate.getDay();
     $scope.year = billboardDate.getYear();

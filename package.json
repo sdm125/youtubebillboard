@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "angular-touch": "^1.6.8",
     "axios": "^0.19.2",
     "billboard-top-100": "^2.5.8",
     "dotenv": "^8.2.0",

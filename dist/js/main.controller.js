@@ -1,34 +1,38 @@
 'use strict';
 
-const app = angular.module('youtubeBillboard', ['ngRoute', 'duScroll', 'ngAnimate']);
+const app = angular.module('youtubeBillboard', [
+  'ngRoute',
+  'duScroll',
+  'ngAnimate',
+]);
 
 app.config(($routeProvider, $sceDelegateProvider) => {
-  $routeProvider.when('/', {
-    templateUrl: 'templates/datepicker.html',
-    controller: 'datePickerCtrl'
-  })
-  .when('/:month/:day/:year', {
-    templateUrl: 'templates/topten.html',
-    controller: 'toptenCtrl'
-  })
-  .otherwise({
-    redirectTo: '/'
-  });
+  $routeProvider
+    .when('/', {
+      templateUrl: 'templates/datepicker.html',
+      controller: 'datePickerCtrl',
+    })
+    .when('/:month/:day/:year', {
+      templateUrl: 'templates/topten.html',
+      controller: 'toptenCtrl',
+    })
+    .otherwise({
+      redirectTo: '/',
+    });
 
   $sceDelegateProvider.resourceUrlWhitelist([
-    'self',                    // trust all resources from the same origin
-    'https://www.youtube.com/**'   // trust all resources from `www.youtube.com`
+    'self', // trust all resources from the same origin
+    'https://www.youtube.com/**', // trust all resources from `www.youtube.com`
   ]);
 });
 
 // Found here https://stackoverflow.com/questions/14878761/bind-class-toggle-to-window-scroll-event
-app.directive("scroll", function ($window) {
-  return function(scope, element, attrs) {
-    angular.element($window).bind("scroll", function() {
+app.directive('scroll', function ($window) {
+  return function (scope, element, attrs) {
+    angular.element($window).bind('scroll', function () {
       if (this.pageYOffset >= 400) {
         scope.boolChangeClass = true;
-      }
-      else {
+      } else {
         scope.boolChangeClass = false;
       }
       scope.$apply();
@@ -36,13 +40,27 @@ app.directive("scroll", function ($window) {
   };
 });
 
-app.directive('lazyLoadVideo', function() {
+// https://stackoverflow.com/questions/26170029/ng-touchstart-and-ng-touchend-in-angularjs
+app.directive('myTouchstart', [
+  function () {
+    return function (scope, element, attr) {
+      element.on('touchstart', function (event) {
+        scope.$apply(function () {
+          scope.$eval(attr.myTouchstart);
+        });
+      });
+    };
+  },
+]);
+
+app.directive('lazyLoadVideo', function () {
   return {
     restrict: 'E',
-    template: '<div class="videowrapper d-none"></div>' +
-              '<i class="fab fa-youtube"></i>' +
-              '<img class="w-100" ng-src="{{ imagesrc }}">',
-    link: function(scope, element, attrs) {
+    template:
+      '<div class="videowrapper d-none"></div>' +
+      '<i class="fab fa-youtube"></i>' +
+      '<img class="w-100" ng-src="{{ imagesrc }}">',
+    link: function (scope, element, attrs) {
       scope.imagesrc = attrs.imagesrc;
       scope.iframesrc = attrs.iframesrc;
       var children = element.children();
@@ -51,15 +69,13 @@ app.directive('lazyLoadVideo', function() {
       var previewImage;
       var videoWrapper;
 
-      element.on('click', function() {
+      element.on('click', function () {
         for (var i = 0; i < children.length; i++) {
           if (children[i].tagName.toLowerCase() === 'i') {
             youtubeIcon = children[i];
-          }
-          else if (children[i].tagName.toLowerCase() === 'img') {
+          } else if (children[i].tagName.toLowerCase() === 'img') {
             previewImage = children[i];
-          }
-          else if (children[i].classList.contains('videowrapper')) {
+          } else if (children[i].classList.contains('videowrapper')) {
             videoWrapper = children[i];
           }
         }
@@ -67,44 +83,49 @@ app.directive('lazyLoadVideo', function() {
         iframe = document.createElement('iframe');
         iframe.src = scope.iframesrc;
         videoWrapper.appendChild(iframe);
-        iframe.onload = function() {
+        iframe.onload = function () {
           videoWrapper.classList.remove('d-none');
           youtubeIcon.remove();
           previewImage.remove();
         };
       });
-    }
+    },
   };
 });
 
-app.directive("videoControls", function () {
+app.directive('videoControls', function () {
   return {
     restrict: 'A',
     scope: {
-      modal: '='
+      modal: '=',
     },
-    link: function(scope, element) {
-      scope.$watch('modal', function(newVal, oldVal) {
-        if (newVal.toggle !== oldVal.toggle && !newVal.toggle) {
-          element[0].contentWindow.postMessage('{"event":"command","func":"stopVideo","args":""}', '*');
-          setTimeout(function() {
-            element[0].style.opacity = '0';
-          }, 500);
-        }
-        else if (newVal.toggle !== oldVal.toggle && newVal.toggle) {
-          if (element[0].style.opacity === '0') {
-            if (newVal.videoIdUrl === oldVal.videoIdUrl) {
-              element[0].style.opacity = '1';
-            }
-            else {
-              element[0].onload = function() {
-                this.style.opacity = '1';
+    link: function (scope, element) {
+      scope.$watch(
+        'modal',
+        function (newVal, oldVal) {
+          if (newVal.toggle !== oldVal.toggle && !newVal.toggle) {
+            element[0].contentWindow.postMessage(
+              '{"event":"command","func":"stopVideo","args":""}',
+              '*'
+            );
+            setTimeout(function () {
+              element[0].style.opacity = '0';
+            }, 500);
+          } else if (newVal.toggle !== oldVal.toggle && newVal.toggle) {
+            if (element[0].style.opacity === '0') {
+              if (newVal.videoIdUrl === oldVal.videoIdUrl) {
+                element[0].style.opacity = '1';
+              } else {
+                element[0].onload = function () {
+                  this.style.opacity = '1';
+                };
               }
             }
           }
-        }
-      }, true);
-    }
+        },
+        true
+      );
+    },
   };
 });
 
@@ -188,11 +209,25 @@ app.filter('monthName', [() => {
   };
 }]);
 
-app.controller('datePickerCtrl', function($document, $rootScope, $scope, $location, $http, viewClass, videoModalToggle, billboardDate) {
-  $document.scrollToElement(angular.element(document.getElementsByTagName('body')[0]), 0, 0);
+app.controller('datePickerCtrl', function(
+  $document,
+  $rootScope,
+  $scope,
+  $location,
+  $http,
+  viewClass,
+  videoModalToggle,
+  billboardDate
+) {
+  $document.scrollToElement(
+    angular.element(document.getElementsByTagName('body')[0]),
+    0,
+    0
+  );
   $scope.month = billboardDate.getMonth() || 7;
   $scope.day = billboardDate.getDay() || 16;
-  $scope.year = billboardDate.getYear() || parseInt(((moment().year() - 1958) / 2) + 1958);
+  $scope.year =
+    billboardDate.getYear() || parseInt((moment().year() - 1958) / 2 + 1958);
   $scope.currentYear = moment().year();
 
   $scope.videoModalToggle = videoModalToggle.getToggle();
@@ -209,19 +244,22 @@ app.controller('datePickerCtrl', function($document, $rootScope, $scope, $locati
     if ($scope[placerholderName]) {
       $scope[placerholderName] = false;
     }
-  }
+  };
 
-  var maxDate = moment(new Date()).subtract((moment().day() + 1), 'days');
-
-  // Date limits
   moment.prototype.monthLength = () => {
     return moment($scope.year + '-' + $scope.month, 'YYYY-MM').daysInMonth();
-  }
+  };
+
+  // Date limits
+  var maxDate = moment(new Date()).subtract(moment().day() + 1, 'days');
   $scope.maxYear = moment().year();
-  $scope.maxMonth = $scope.year === moment().year() ? (moment(maxDate).month() + 1) : 12;
-  // If selected year is current year and selected month is current month, maxDay is previous saturday
+  $scope.maxMonth = $scope.year === moment().year() ? maxDate.month() + 1 : 12;
+  // If selected year is current year and selected month is m max month, maxDay is previous saturday
   // otherwise maxDay is number of days in month.
-  $scope.maxDay = ($scope.year === moment().year() && $scope.month === (moment().month() + 1)) ? moment(maxDate).date() : moment.prototype.monthLength();
+  $scope.maxDay =
+    $scope.year === moment().year() && $scope.maxMonth === maxDate.month() + 1
+      ? maxDate.date()
+      : moment.prototype.monthLength();
 
   // Set initial date slider to year
   $scope.toggleDate = 'year';
@@ -235,10 +273,16 @@ app.controller('datePickerCtrl', function($document, $rootScope, $scope, $locati
   $scope.currentYear = new Date().getFullYear();
 
   // Update monthLength on change of month and years
-  $scope.$watchGroup(['month', 'day', 'year'], function(newVal,oldVal) {
+  $scope.$watchGroup(['month', 'day', 'year'], function(newVal, oldVal) {
     if (newVal !== oldVal) {
-      $scope.maxDay = ($scope.year === moment().year() && $scope.month === (moment().month() + 1)) ? moment(maxDate).date() : moment.prototype.monthLength();
-      $scope.maxMonth = $scope.year === moment().year() ? (moment().month() + 1) : 12;
+      $scope.maxMonth =
+        $scope.year === moment().year() ? maxDate.month() + 1 : 12;
+
+      $scope.maxDay =
+        $scope.year === moment().year() &&
+        $scope.maxMonth === maxDate.month() + 1
+          ? maxDate.date()
+          : moment.prototype.monthLength();
     }
   });
 
@@ -252,21 +296,32 @@ app.controller('datePickerCtrl', function($document, $rootScope, $scope, $locati
       $rootScope.$broadcast('billBoardDateUpdated');
       $rootScope.$broadcast('toggleLoaderUpdated', true);
       $location.path(`/${$scope.month}/${$scope.day}/${$scope.year}/`);
-    }
-    else {
-      $rootScope.$broadcast('toggleErrorModalUpdated', {toggle: true, message: 'Please enter a valid date.'});
+    } else {
+      $rootScope.$broadcast('toggleErrorModalUpdated', {
+        toggle: true,
+        message: 'Please enter a valid date.'
+      });
     }
   };
 
   function validateDate(month, day, year) {
-    if ($scope.showDayPlaceholder || $scope.showMonthPlaceholder || $scope.showYearPlaceholder) {
+    if (
+      $scope.showDayPlaceholder ||
+      $scope.showMonthPlaceholder ||
+      $scope.showYearPlaceholder
+    ) {
       return false;
-    }
-    else {
-      month = month < 10 ? `0${new Number(month).toString().replace('0', '')}` : month;
+    } else {
+      month =
+        month < 10
+          ? `0${new Number(month).toString().replace('0', '')}`
+          : month;
       day = day < 10 ? `0${new Number(day).toString().replace('0', '')}` : day;
       let date = `${year}-${month}-${day}`;
-      return moment(date).isValid() && moment(moment(new Date()).diff(date, 'days')) >= 0;
+      return (
+        moment(date).isValid() &&
+        moment(moment(new Date()).diff(date, 'days')) >= 0
+      );
     }
   }
 });
@@ -312,64 +367,77 @@ app.controller('loaderCtrl', function($scope, billboardDate) {
     $scope.showLoader.toggle = toggle;
   });
 });
-app.controller('navCtrl', function($scope, $location, $timeout, viewClass, videoModalToggle, billboardDate, toastToggle) {
+app.controller('navCtrl', function (
+  $scope,
+  $location,
+  $timeout,
+  viewClass,
+  videoModalToggle,
+  billboardDate,
+  toastToggle
+) {
   $scope.viewClass = viewClass.getViewClass();
   $scope.videoModalToggle = videoModalToggle.getToggle();
   $scope.showHelp = false;
-  
-  $scope.$on('viewClassUpdated', function() {
+
+  $scope.$on('viewClassUpdated', function () {
     $scope.viewClass = viewClass.getViewClass();
   });
 
-  $scope.$on('videoModalToggleUpdated', function() {
+  $scope.$on('videoModalToggleUpdated', function () {
     $scope.videoModalToggle = videoModalToggle.getToggle();
   });
 
-  // Found parts of this here https://stackoverflow.com/questions/43139185/how-to-copy-a-string-to-clipboard-with-ng-click-in-angularjs
-  $scope.copyLink = function(event) {
-    var body = document.querySelector('body');
-    var copyElement = document.createElement('textarea');
-    copyElement.style.height = 0;
-    copyElement.style.width = 0;
-    copyElement.style.position = 'absolute';
-    copyElement.style.top = '50000px';
-    copyElement.textContent = $location.$$absUrl;
-    body.appendChild(copyElement);
-    copyElement.select();
+  // https://stackoverflow.com/questions/29267589/angularjs-copy-to-clipboard
+  $scope.copyLink = function () {
+    // create temp element
+    var copyElement = document.createElement('span');
+    copyElement.appendChild(document.createTextNode($location.$$absUrl));
+    copyElement.id = 'tempCopyToClipboard';
+    angular.element(document.body.append(copyElement));
+
+    // select the text
+    var range = document.createRange();
+    range.selectNode(copyElement);
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(range);
+
+    // copy & cleanup
     document.execCommand('copy');
-    body.removeChild(copyElement);
+    window.getSelection().removeAllRanges();
+    copyElement.remove();
 
     toastToggle.setToggle(true);
     $scope.$parent.$broadcast('toastToggleUpdated', toastToggle.getToggle);
-    
-    $timeout(function() {
+
+    $timeout(function () {
       toastToggle.setToggle(false);
       $scope.$parent.$broadcast('toastToggleUpdated', toastToggle.getToggle);
     }, 3000);
   };
-  
-  $scope.help = function() {
+
+  $scope.help = function () {
     $scope.showHelp = !$scope.showHelp;
     $scope.$parent.$broadcast('toggledHelp', $scope.showHelp);
   };
 
-  $scope.back = function() {
+  $scope.back = function () {
     if ($scope.videoModalToggle) {
       $scope.videoModalToggle = !$scope.videoModalToggle;
       videoModalToggle.setToggle($scope.videoModalToggle);
       $scope.$parent.$broadcast('videoModalToggleUpdated');
-    }
-    else {
+    } else {
       $location.path('/');
     }
   };
 
-  $scope.$on('billBoardDateUpdated', function() {
+  $scope.$on('billBoardDateUpdated', function () {
     $scope.month = billboardDate.getMonth();
     $scope.day = billboardDate.getDay();
     $scope.year = billboardDate.getYear();
   });
 });
+
 app.controller('toptenCtrl', function($rootScope, $scope, $routeParams, $http, $document, viewClass, videoModalToggle, toastToggle, billboardDate) {
   viewClass.setViewClass('top-ten');
   $scope.viewClass = viewClass.getViewClass();

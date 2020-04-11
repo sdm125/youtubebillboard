@@ -20,6 +20,7 @@
     "angular-route": "1.6.8",
     "moment": "^2.22.0",
     "components-font-awesome": "^5.0.6",
-    "angular-scroll": "^1.0.2"
+    "angular-scroll": "^1.0.2",
+    "ngtouchstart": "^1.0.1"
   }
 }
