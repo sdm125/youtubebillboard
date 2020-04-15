@@ -286,7 +286,6 @@ app.controller('datePickerCtrl', function (
   });
 
   $http.get('/api/topten/random/').then(function (res) {
-    console.log(res);
     $scope.randomSongs = res.data;
   });
 
