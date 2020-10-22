@@ -1,1 +1,1 @@
-AngularJS app to search Billboard Top 100 by date. Music videos can be played of any songs on any chart through an embedded YouTube player using the YouTube API, Azure Video Search API, and puppeteer.js. All Billboard and YouTube data that is queried in the app is saved to a MySQL database.
+AngularJS app to search Billboard Top 100 by date. Music videos can be played of any songs on any chart through an embedded YouTube player using the YouTube API, Azure Video Search API, and puppeteer.js. All Billboard and video data that is queried in the app is saved to a MySQL database.
