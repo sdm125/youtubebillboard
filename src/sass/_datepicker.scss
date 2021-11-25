@@ -1,4 +1,4 @@
-#date{
+#date {
   padding: 0.375rem 0.75rem;
   font-size: 2.5rem;
   line-height: 1.5;
@@ -12,7 +12,7 @@
   &::placeholder {
     color: #ccc;
   }
-  
+
   @media only screen and (max-width: 768px) {
     font-size: 7vw;
   }
@@ -56,7 +56,7 @@
 
 .date-btns {
   border-radius: 20px;
-  box-shadow: 0 0px 4px 0 rgba(25, 33, 36, 0.14); 
+  box-shadow: 0 0px 4px 0 rgba(25, 33, 36, 0.14);
 
   button {
     width: 100%;
@@ -73,9 +73,9 @@
 .range-marker {
   position: relative;
   text-align: center;
-  
+
   &:after {
-    content: " ";
+    content: ' ';
     position: absolute;
     bottom: -15px;
     left: 0;
@@ -88,21 +88,21 @@
   }
 }
 
-input[type="range"] {
-  -webkit-appearance: none;  /* Override default CSS styles */
+input[type='range'] {
+  -webkit-appearance: none; /* Override default CSS styles */
   appearance: none;
   width: 100%; /* Full-width */
   height: 8px; /* Specified height */
   background: #222; /* Grey background */
   outline: none; /* Remove outline */
   // opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
-  -webkit-transition: .2s; /* 0.2 seconds transition on hover */
-  transition: opacity .2s;
+  -webkit-transition: 0.2s; /* 0.2 seconds transition on hover */
+  transition: opacity 0.2s;
   border-radius: 20px;
 }
 
 input {
-  &[type="range"] {
+  &[type='range'] {
     &::-webkit-slider-thumb {
       -webkit-appearance: none;
       appearance: none;
@@ -110,6 +110,8 @@ input {
       height: 30px;
       border: none;
       cursor: pointer;
+      box-shadow: none !important;
+      background-color: transparent !important;
     }
   }
 }
@@ -144,7 +146,7 @@ input {
     position: absolute;
     font-size: 4rem;
     color: #fff;
-    opacity: .75;
+    opacity: 0.75;
     left: 0;
     right: 0;
     margin: auto;

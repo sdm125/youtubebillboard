@@ -46,7 +46,9 @@
 
   &.ng-leave {
     position: absolute;
-    top: 0; left: 0; right: 0;
+    top: 0;
+    left: 0;
+    right: 0;
     z-index: 101;
     animation: slide 1s;
   }
@@ -66,10 +68,10 @@
   margin: auto;
   z-index: 400;
   box-shadow: 0 0px 4px 0 rgba(25, 33, 36, 0.14) !important;
-  transition: all .5s linear;
-  
+  transition: all 0.5s linear;
+
   &.fade {
-    opacity: .95
+    opacity: 0.95;
   }
   &.fade.ng-hide {
     opacity: 0;
@@ -91,16 +93,17 @@
     font-size: 1.3rem;
     transition: background-color 250ms, color 250ms;
     cursor: pointer;
-    
+    color: #000 !important;
+
     &.page-selected,
     &:hover {
       background: #333;
-      color: #fff;
+      color: #fff !important;
     }
   }
 }
 
-.fa-stack{
+.fa-stack {
   margin: 0 12px;
 }
 
@@ -113,7 +116,7 @@
   opacity: 0;
   transition: opacity 250ms;
   position: fixed;
-  background: rgba(255, 255, 255, .90);
+  background: rgba(255, 255, 255, 0.9);
   right: 15px;
   bottom: 10px;
   border: 1px solid #00000029;

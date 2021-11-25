@@ -370,7 +370,7 @@ footer {
   position: relative;
   text-align: center; }
   .range-marker:after {
-    content: " ";
+    content: ' ';
     position: absolute;
     bottom: -15px;
     left: 0;
@@ -381,7 +381,7 @@ footer {
     border-left: 2px solid #000;
     z-index: -1; }
 
-input[type="range"] {
+input[type='range'] {
   -webkit-appearance: none;
   /* Override default CSS styles */
   appearance: none;
@@ -393,18 +393,20 @@ input[type="range"] {
   /* Grey background */
   outline: none;
   /* Remove outline */
-  -webkit-transition: .2s;
+  -webkit-transition: 0.2s;
   /* 0.2 seconds transition on hover */
-  transition: opacity .2s;
+  transition: opacity 0.2s;
   border-radius: 20px; }
 
-input[type="range"]::-webkit-slider-thumb {
+input[type='range']::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
   width: 30px;
   height: 30px;
   border: none;
-  cursor: pointer; }
+  cursor: pointer;
+  box-shadow: none !important;
+  background-color: transparent !important; }
 
 .slider.month::-webkit-slider-thumb {
   background: url("../images/month_slider_btn.svg") no-repeat; }
@@ -424,7 +426,7 @@ input[type="range"]::-webkit-slider-thumb {
     position: absolute;
     font-size: 4rem;
     color: #fff;
-    opacity: .75;
+    opacity: 0.75;
     left: 0;
     right: 0;
     margin: auto;
@@ -499,9 +501,9 @@ input[type="range"]::-webkit-slider-thumb {
   margin: auto;
   z-index: 400;
   box-shadow: 0 0px 4px 0 rgba(25, 33, 36, 0.14) !important;
-  transition: all .5s linear; }
+  transition: all 0.5s linear; }
   .toast.fade {
-    opacity: .95; }
+    opacity: 0.95; }
   .toast.fade.ng-hide {
     opacity: 0; }
   .toast.fade.ng-hide-remove {
@@ -516,10 +518,11 @@ input[type="range"]::-webkit-slider-thumb {
   width: 35px;
   font-size: 1.3rem;
   transition: background-color 250ms, color 250ms;
-  cursor: pointer; }
+  cursor: pointer;
+  color: #000 !important; }
   .pages button.page-selected, .pages button:hover {
     background: #333;
-    color: #fff; }
+    color: #fff !important; }
 
 .fa-stack {
   margin: 0 12px; }
