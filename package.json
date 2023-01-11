@@ -14,7 +14,7 @@
     "billboard-top-100": "^2.5.8",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "knex": "^0.19.5",
+    "knex": "^2.4.0",
     "moment": "^2.24.0",
     "mysql": "^2.18.1",
     "puppeteer": "^1.20.0",
